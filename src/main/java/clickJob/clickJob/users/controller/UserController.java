@@ -1,5 +1,7 @@
 package clickJob.clickJob.users.controller;
 
+import clickJob.clickJob.board.dto.BoardResponse;
+import clickJob.clickJob.board.service.BoardService;
 import clickJob.clickJob.users.dto.UserChangeEmailRequest;
 import clickJob.clickJob.users.dto.UserChangePasswordRequest;
 import clickJob.clickJob.users.dto.UserRequest;
@@ -32,6 +34,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final BoardService boardService;
 
     //== 메인 페이지 ==//
     @GetMapping("/")
@@ -113,46 +116,52 @@ public class UserController {
                 .body("접근 권한이 없습니다.");
     }
 
-//    @GetMapping("/user/mypage")  //rest-api에서는 대문자를 쓰지않는다.
-//    public ResponseEntity<?> myPage(
-//            @PageableDefault(page = 0, size = 10)
-//            @SortDefault.SortDefaults({
-//                    @SortDefault(sort = "id", direction = Sort.Direction.DESC)
-//            }) Pageable pageable,
-//            Principal principal
-//    ) {
-//        UserResponse users = userService.getUserByEmail(principal.getName());
-//
-//        if (users != null) {
-//            Map<String, Object> map = new HashMap<>();
-//
-//
-//            return ResponseEntity.ok(map);
-//        } else {
-//            return ResponseEntity.ok("해당 유저가 없어 조회할 수 없습니다.");
-//        }
-//    }
+    @GetMapping("/user/mypage")
+    public ResponseEntity<?> myPage(
+            @PageableDefault(page = 0, size = 10)
+            @SortDefault.SortDefaults({
+                    @SortDefault(sort = "id", direction = Sort.Direction.DESC)
+            }) Pageable pageable,
+            Principal principal
+    ) {
+        UserResponse users = userService.getUserByEmail(principal.getName());
 
-//    //== Profile - 상대가 보는 내 프로필 ==// 닉네임으로 들고옴.
-//    @GetMapping("/user/profile/{nickname}")
-//    public ResponseEntity<?> ProfilePage(
-//            @PageableDefault(page = 0, size = 10)
-//            @SortDefault.SortDefaults({
-//                    @SortDefault(sort = "id", direction = Sort.Direction.DESC)
-//            }) Pageable pageable,
-//            @PathVariable("nickname") String nickname
-//    ) {
-//        UserResponse users = userService.getUserByNickname(nickname);
-//
-//        if (users != null) {
-//            Map<String, Object> map = new HashMap<>();
-//
-//
-//            return ResponseEntity.ok(map);
-//        } else {
-//            return ResponseEntity.ok("해당 유저가 없어 조회할 수 없습니다.");
-//        }
-//    }
+        if (users != null) {
+            Map<String, Object> map = new HashMap<>();
+            Page<BoardResponse> board = boardService.getBoardByEmail(principal.getName(), pageable);
+
+            map.put("users", users);
+            map.put("board", board);
+
+            return ResponseEntity.ok(map);
+        } else {
+            return ResponseEntity.ok("해당 유저가 없어 조회할 수 없습니다.");
+        }
+    }
+
+    //== Profile - 상대가 보는 내 프로필 ==// 닉네임으로 들고옴.
+    @GetMapping("/user/profile/{nickname}")
+    public ResponseEntity<?> ProfilePage(
+            @PageableDefault(page = 0, size = 10)
+            @SortDefault.SortDefaults({
+                    @SortDefault(sort = "id", direction = Sort.Direction.DESC)
+            }) Pageable pageable,
+            @PathVariable("nickname") String nickname
+    ) {
+        UserResponse users = userService.getUserByNickname(nickname);
+
+        if (users != null) {
+            Map<String, Object> map = new HashMap<>();
+            Page<BoardResponse> board = boardService.getBoardByNickname(nickname, pageable);
+
+            map.put("users", users);
+            map.put("board", board);
+
+            return ResponseEntity.ok(map);
+        } else {
+            return ResponseEntity.ok("해당 유저가 없어 조회할 수 없습니다.");
+        }
+    }
 
     //== 닉네임 등록 ==//
     @PostMapping("/user/nickname-post")
