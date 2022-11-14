@@ -116,7 +116,6 @@ public class CommentController {
         } else {
             return ResponseEntity.ok("해당 댓글이 없어 수정이 불가능합니다.");
         }
-
     }
 
     @PostMapping("/comment/good/{id}")
