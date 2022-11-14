@@ -6,7 +6,6 @@ import clickJob.clickJob.comment.dto.CommentRequest;
 import clickJob.clickJob.comment.dto.CommentResponse;
 import clickJob.clickJob.comment.model.Comment;
 import clickJob.clickJob.comment.service.CommentService;
-import clickJob.clickJob.users.dto.UserResponse;
 import clickJob.clickJob.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -97,20 +96,27 @@ public class CommentController {
         Comment comment = commentService.getCommentEntity(id);
         String user = userService.getUserByEmail(principal.getName()).getNickname();
 
-        if (Objects.equals(comment.getUsers().getNickname(), user)) {
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setLocation(URI.create("/comment/" + comment.getBoard().getId()));
+        if (comment != null) {
 
-            commentService.editComment(content, id);
-            log.info("댓글 수정 성공 !!");
+            if (Objects.equals(comment.getUsers().getNickname(), user)) {
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.setLocation(URI.create("/comment/" + comment.getBoard().getId()));
 
-            return ResponseEntity
-                    .status(HttpStatus.MOVED_PERMANENTLY)
-                    .headers(httpHeaders)
-                    .build();
+                commentService.editComment(content, id);
+                log.info("댓글 수정 성공 !!");
+
+                return ResponseEntity
+                        .status(HttpStatus.MOVED_PERMANENTLY)
+                        .headers(httpHeaders)
+                        .build();
+            } else {
+                return ResponseEntity.ok("회원님이 댓글 작성자와 달라 수정할 수 없습니다.");
+            }
+
         } else {
-            return ResponseEntity.ok("회원님이 댓글 작성자와 달라 수정할 수 없습니다.");
+            return ResponseEntity.ok("해당 댓글이 없어 수정이 불가능합니다.");
         }
+
     }
 
     @PostMapping("/comment/good/{id}")
