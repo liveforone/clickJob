@@ -1,0 +1,91 @@
+package clickJob.clickJob.follow.service;
+
+import clickJob.clickJob.follow.model.Follow;
+import clickJob.clickJob.follow.repository.FollowRepository;
+import clickJob.clickJob.users.model.Users;
+import clickJob.clickJob.users.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class FollowService {
+
+    private final FollowRepository followRepository;
+    private final UserRepository userRepository;
+
+    //== 내가 팔로우하는 사람들 ==//
+    public List<String> getMyFollowList(String email) {
+        List<Follow> followList = followRepository.findByFollower(email);
+        List<String> list = new ArrayList<>();
+
+        for (Follow follow : followList) {
+            list.add(follow.getUsers().getNickname());
+        }
+
+        return list;
+    }
+
+    //== 나를 팔로우하는 사람들 ==//
+    public List<String> getMyFollowerList(String email) {
+        List<Follow> followerList = followRepository.findByUsers(email);
+        List<String> list = new ArrayList<>();
+
+        for (Follow follow : followerList) {
+            list.add(follow.getFollower().getNickname());
+        }
+
+        return list;
+    }
+
+    //== 프로필 - 프로필 주인이 팔로우하는 사람들 ==//
+    public List<String> getProfileFollowList(String nickname) {
+        List<Follow> followList = followRepository.findByFollowerNickname(nickname);
+        List<String> list = new ArrayList<>();
+
+        for (Follow follow : followList) {
+            list.add(follow.getUsers().getNickname());
+        }
+
+        return list;
+    }
+
+    //== 프로필 - 프로필 주인을 팔로우하는 사람들 ==//
+    public List<String> getProfileFollowerList(String nickname) {
+        List<Follow> followerList = followRepository.findByUsersNickname(nickname);
+        List<String> list = new ArrayList<>();
+
+        for (Follow follow : followerList) {
+            list.add(follow.getFollower().getNickname());
+        }
+
+        return list;
+    }
+
+    @Transactional
+    public void saveFollow(String users, String follower) {
+        Users user = userRepository.findByNickname(users);
+        Users user_follower = userRepository.findByEmail(follower);
+
+        Follow follow = Follow.builder()
+                .follower(user_follower)
+                .users(user)
+                .build();
+
+        followRepository.save(follow);
+    }
+
+    @Transactional
+    public void unfollow(String follower, String users) {
+        Users user_me = userRepository.findByEmail(follower);  //나
+        Users user_follow = userRepository.findByNickname(users);  //내가 팔로우하는 사람
+
+        Follow follow = followRepository.findByFollowerAndUsers(user_me, user_follow);
+        followRepository.deleteById(follow.getId());
+    }
+}
