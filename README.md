@@ -85,6 +85,15 @@
 /resume/post - get/post
 /resume/edit - get/post
 ```
+### job
+```
+/job - get
+/job/search - get
+/job/post - get/post
+/job/{id} - get
+/job/edit/{id} - get/post
+/job/delete/{id} - post
+```
 
 ## Json Body
 ### users
@@ -159,6 +168,9 @@ this is updated comment - text
 마이페이지 -> 팔로우리스트 & 팔로잉 리스트 이동, 닉네임등록, 이메일 & pw 변경, 회원탈퇴, 이력서로 이동
 커뮤니티 홈 -> 베스트 게시글, 게시글 검색, 게시글 작성, 작성자 페이지
 게시글 상세 -> 좋아요, 게시글 수정, 게시글 삭제, 댓글 리스트
+이력서 -> 이력서 없을시 자동으로 이력서 작성페이지 이동 or 이력서 수정 페이지 이동 가능
+채용공고 홈 -> 채용공고 상세, 작성자 프로필로 이동, 채용공고 검색
+채용공고 상세 -> 채용 신청, 작성자일 경우 신청자 리스트 확인, 수정, 마감(삭제)
 ```
 
 ## 연관관계
@@ -195,11 +207,4 @@ this is updated comment - text
 erd 작성
 
 -순서
-북마크, 어플라이 + jobservice에 volunteer update 하기. 
-
-!!Feat 마다 필수!!
-get, post 모두 없는 값을 넣어보는 테스트를 해서 널체킹 잘되는지 확인하기
-
--주의사항
-코드를 작성하며 중유하거나 새롭게 적용한점은 바로 상세설명란에 문서화 시킨다.
-문서화는 바로바로 하는 것을 지향한다.
+북마크, 어플라이 + jobservice에 volunteer update 하기.
