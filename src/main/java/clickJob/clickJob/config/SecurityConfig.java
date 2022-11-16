@@ -54,6 +54,7 @@ public class SecurityConfig {
                 .antMatchers("/board/post").authenticated()
                 .antMatchers("/board/edit").authenticated()
                 .antMatchers("/board/delete").authenticated()
+                .antMatchers("/resume/post").authenticated()
                 .antMatchers("/mypage").authenticated()
                 .and() // 로그아웃 설정
                 .logout()
