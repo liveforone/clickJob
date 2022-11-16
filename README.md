@@ -79,6 +79,12 @@
 /follow/profile-follow/{nickname} - get
 /follow/profile-follower/{nickname} - get
 ```
+### resume
+```
+/my-resume - get
+/resume/post - get/post
+/resume/edit - get/post
+```
 
 ## Json Body
 ### users
@@ -114,11 +120,43 @@
 }
 this is updated comment - text
 ```
+### resume
+```
+{
+    "introduction" : "저는 개발자 chan kim 입니다.",
+    "skill" : "Spring(spring boot), Jpa, Security, my-sql",
+    "location" : "seoul",
+    "academic" : "seoul university"
+}
+{
+    "introduction" : "저는 개발자 chan kim 입니다.",
+    "skill" : "업데이트 된 이력서",
+    "location" : "부산",
+    "academic" : "seoul university"
+}
+```
+### job
+```
+{
+    "title" : "job1",
+    "content" : "chan kim company에서 백엔드 개발자를 뽑습니다.",
+    "position" : "junior",
+    "company" : "chan kim company",
+    "duty" : "backend software engineer"
+}
+{
+    "title" : "updated title",
+    "content" : "chan kim company에서 백엔드 개발자를 뽑습니다.",
+    "position" : "senior",
+    "company" : "chan kim company",
+    "duty" : "backend software engineer"
+}
+```
 
 ## 뷰 설계
 ```
 홈 -> 마이페이지, 커뮤니티, Job
-마이페이지 -> 팔로우리스트 & 팔로잉 리스트, 닉네임등록, 이메일 & pw 변경, 회원탈퇴
+마이페이지 -> 팔로우리스트 & 팔로잉 리스트 이동, 닉네임등록, 이메일 & pw 변경, 회원탈퇴, 이력서로 이동
 커뮤니티 홈 -> 베스트 게시글, 게시글 검색, 게시글 작성, 작성자 페이지
 게시글 상세 -> 좋아요, 게시글 수정, 게시글 삭제, 댓글 리스트
 ```
@@ -139,24 +177,29 @@ this is updated comment - text
 ```
 @Query("select f from Follow f join fetch f.follower join fetch f.users where f.follower = :follower and f.users = :users")
 ```
+## Resume
+* my-resume로 들어올경우 나의 이력서가 없으면 이력서 post 페이지로 리다이렉트시킴.
+* resume에서 introduction같은 경우에는 긴글(설명글)이기에 
+* @Column(columnDefinition = "TEXT") 으로 처리를 하였다.
+* 그런데 skill의 경우에는 콤마(,) 라던지, 느낌표, 괄호 등의 기호가 들어간다.
+* 가지고 있는 기술이 한가지가 아니라 여러개일 수 있기때문이다.
+* location 또한 마찬가지라서 컬럼 설정값을 넣었다.
+* 예시 : skill : jpa, spring(spring boot)
 
 # 4. 나의 고민
 
 
 -문서 할일
 뷰설계 계속 채워나가기
-
--코드 할일
-job에 좋아요(해쉬태그는 따로 않넣어도 됨.)
-북마크 추가(job에만)
+연관관계
+erd 작성
 
 -순서
-레줘미, 잡, 북마크, 어플라이, 
-전체적인 서비스로직에서 dto detail로 변환시 널 체크하고 널인경우 널 반환
-무언가 반환할때 null이다. 그럼 null 리턴하면 됨.
+북마크, 어플라이 + jobservice에 volunteer update 하기. 
+
+!!Feat 마다 필수!!
+get, post 모두 없는 값을 넣어보는 테스트를 해서 널체킹 잘되는지 확인하기
 
 -주의사항
 코드를 작성하며 중유하거나 새롭게 적용한점은 바로 상세설명란에 문서화 시킨다.
 문서화는 바로바로 하는 것을 지향한다.
-
-잡에서 타이틀과 컨텐트는 size 걸지말자.
