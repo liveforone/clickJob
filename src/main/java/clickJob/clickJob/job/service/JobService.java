@@ -89,4 +89,9 @@ public class JobService {
     public void updateVolunteer(Long id) {
         jobRepository.updateVolunteer(id);
     }
+
+    @Transactional
+    public void deleteJob(Long id) {
+        jobRepository.deleteById(id);
+    }
 }

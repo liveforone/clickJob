@@ -97,7 +97,7 @@ public class JobController {
 
             return ResponseEntity.ok(map);
         } else {
-            return ResponseEntity.ok("채용공고가 존재하지 않습니다.");
+            return ResponseEntity.ok("마감되었거나 존재하지 않는 채용공고 입니다.");
         }
     }
 
@@ -148,6 +148,35 @@ public class JobController {
 
         } else {
             return ResponseEntity.ok("채용공고가 존재하지않아 수정이 불가능합니다.");
+        }
+    }
+
+    @PostMapping("/job/delete/{id}")
+    public ResponseEntity<?> jobDelete(
+            @PathVariable("id") Long id,
+            Principal principal
+    ) {
+        Job job = jobService.getJobDetail(id);
+
+        if (job != null) {
+
+            if (Objects.equals(job.getUsers().getEmail(), principal.getName())) {
+                jobService.deleteJob(id);
+                log.info("채용공고 id=" + id + " 가 마감되었습니다.");
+
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.setLocation(URI.create("/job"));
+
+                return ResponseEntity
+                        .status(HttpStatus.MOVED_PERMANENTLY)
+                        .headers(httpHeaders)
+                        .build();
+            } else {
+                return ResponseEntity.ok("작성자와 회원님이 달라 채용공고 마감이 불가능합니다.");
+            }
+
+        } else {
+            return ResponseEntity.ok("마감되었거나 존재하지 않는 채용공고 입니다.");
         }
     }
 }
