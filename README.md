@@ -33,6 +33,7 @@
 * 뷰에 보여주는 모든 유저이름은 이메일이 아닌 닉네임이다. 이메일은 오직 작성자 검증에서만 사용한다.
 
 ## ERD Diagram
+![스크린샷(141)](https://user-images.githubusercontent.com/88976237/202464309-68163a71-f0dd-490f-8dea-310051f64ebb.png)
 
 ## API 설계
 ### users
@@ -171,7 +172,7 @@ this is updated comment - text
 ## 뷰 설계
 ```
 홈 -> 마이페이지, 커뮤니티, Job
-마이페이지 -> 팔로우리스트 & 팔로잉 리스트 이동, 닉네임등록, 이메일 & pw 변경, 회원탈퇴, 이력서로 이동
+마이페이지 -> 팔로우리스트 & 팔로잉 리스트 이동, 닉네임등록, 이메일 & pw 변경, 회원탈퇴, 이력서로 이동, 나의 구직 리스트, 나의 북마크
 커뮤니티 홈 -> 베스트 게시글, 게시글 검색, 게시글 작성, 작성자 페이지
 게시글 상세 -> 좋아요, 게시글 수정, 게시글 삭제, 댓글 리스트
 이력서 -> 이력서 없을시 자동으로 이력서 작성페이지 이동 or 이력서 수정 페이지 이동 가능
@@ -181,7 +182,13 @@ this is updated comment - text
 
 ## 연관관계
 ```
-
+resume -> users(다대일)
+job -> users(다대일)
+follow -> users(users, follower, 다대일, 이중조인)
+bookmark -> users(다대일), job(다대일)
+apply -> users(다대일), job(다대일)
+board -> users(다대일)
+comment -> users(다대일), board(다대일)
 ```
 
 # 3. 상세 설명
@@ -226,11 +233,3 @@ this is updated comment - text
 * 이 if문을 그대로 사용하며 가독성을 정말 너무너무 좋게 만들 수 있는 스타일이다.
 * 이것에 완전히 흠뻑 빠져버렸고, 그 스타일에 대해 내가 정리를 한 링크를 아래에 달았다.
 * [gate way 스타일 가이드](https://github.com/liveforone/study/blob/main/spring/%EB%8D%94%20%EC%A2%8B%EC%9D%80%20%EB%B6%84%EA%B8%B0%EB%AC%B8.md)
-
--문서 할일
-뷰설계 계속 채워나가기
-연관관계
-erd 작성
-
--순서
-북마크, 어플라이 + jobservice에 volunteer update 하기.
