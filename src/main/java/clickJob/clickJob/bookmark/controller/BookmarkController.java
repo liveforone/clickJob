@@ -39,9 +39,14 @@ public class BookmarkController {
             Principal principal
     ) {
         Job job = jobService.getJobDetail(jobId);
+        Bookmark bookmark = bookmarkService.getBookmark(principal.getName(), jobId);
 
         if (job == null) {
             return ResponseEntity.ok("해당 채용 공고를 찾을 수 없어 북마킹이 불가능합니다.");
+        }
+
+        if (bookmark != null) {  //중복될 때
+            return ResponseEntity.ok("이미 북마크 하였습니다.");
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();

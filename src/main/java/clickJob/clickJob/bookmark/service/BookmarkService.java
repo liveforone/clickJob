@@ -49,7 +49,7 @@ public class BookmarkService {
         Users users = userRepository.findByEmail(email);
         Job job = jobRepository.findOneById(jobId);
 
-        return bookmarkRepository.findUsersAndBoard(users, job);
+        return bookmarkRepository.findOneBookmark(users, job);
     }
 
     @Transactional
