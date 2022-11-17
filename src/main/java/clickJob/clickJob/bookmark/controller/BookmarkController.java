@@ -1,5 +1,6 @@
 package clickJob.clickJob.bookmark.controller;
 
+import clickJob.clickJob.bookmark.model.Bookmark;
 import clickJob.clickJob.bookmark.service.BookmarkService;
 import clickJob.clickJob.job.model.Job;
 import clickJob.clickJob.job.service.JobService;
@@ -61,15 +62,20 @@ public class BookmarkController {
             Principal principal
     ) {
         Job job = jobService.getJobDetail(jobId);
+        Bookmark bookmark = bookmarkService.getBookmark(principal.getName(), jobId);
 
         if (job == null) {
             return ResponseEntity.ok("해당 채용공고를 찾을 수 없어 북마크 취소가 불가능합니다.");
         }
 
+        if (bookmark == null) {
+            return ResponseEntity.ok("해당 북마크가 없어 북마크 취소가 불가능합니다.");
+        }
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(URI.create("/job/" + jobId));
 
-        bookmarkService.bookmarkCancel(principal.getName(), jobId);
+        bookmarkService.bookmarkCancel(bookmark.getId());
         log.info("북마크 삭제 성공!!");
 
         return ResponseEntity
