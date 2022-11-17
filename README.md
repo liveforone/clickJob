@@ -94,6 +94,12 @@
 /job/edit/{id} - get/post
 /job/delete/{id} - post
 ```
+### bookmark
+```
+/my-bookmark - get
+/bookmark/post/{jobId} - post
+/bookmark/cancel/{jobId} - post
+```
 
 ## Json Body
 ### users
@@ -205,6 +211,11 @@ this is updated comment - text
 * 가지고 있는 기술이 한가지가 아니라 여러개일 수 있기때문이다.
 * location 또한 마찬가지라서 컬럼 설정값을 넣었다.
 * 예시 : skill : jpa, spring(spring boot)
+## 신청서비스 중복 체크
+* 해당 어플리케이션에는 여러가지 신청 서비스가 있다.
+* 북마크, 팔로우, 구직(apply)
+* 위와 같은 신청 서비스는 중복이 일어난다.
+* 따라서 반드시 where and 절로 detail을 db에서 찾아와 중복을 체크해주는 것이 필요하다.
 
 # 4. 나의 고민
 ## if문의 복잡성 줄이기
@@ -220,8 +231,6 @@ this is updated comment - text
 뷰설계 계속 채워나가기
 연관관계
 erd 작성
-study에 게이트웨어 스타일 가이드 작성하고 링크달기(또한 정리시 이전 코드와 현재 코드 비교 + 이중 if문도 간단하게 보이는 것을 보여주기)
-플러스로 콜레션에서의 널체크를 해야하는 상황도 설명하기
 
 -순서
 북마크, 어플라이 + jobservice에 volunteer update 하기.
