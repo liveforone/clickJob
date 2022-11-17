@@ -99,27 +99,33 @@ public class BoardController {
     ) {
         Board boardEntity = boardService.getBoardEntity(id);
 
-        if (boardEntity != null) {
-            boardService.updateView(id);
-            log.info("게시글 조회수 + 1");
-
-            Map<String, Object> map = new HashMap<>();
-            BoardResponse board = boardService.entityToDtoDetail(boardEntity);
-            String writer = boardEntity.getUsers().getNickname();
-            String user = userService.getUserByEmail(principal.getName()).getNickname();
-
-            map.put("user", user);
-            map.put("writer", writer);
-            map.put("board", board);
-
-            return ResponseEntity.ok(map);
-        } else {
+        if (boardEntity == null) {
             return ResponseEntity.ok("해당 게시글이 존재하지 않아 조회가 불가능합니다.");
         }
+
+        boardService.updateView(id);
+        log.info("게시글 조회수 + 1");
+
+        Map<String, Object> map = new HashMap<>();
+        BoardResponse board = boardService.entityToDtoDetail(boardEntity);
+        String writer = boardEntity.getUsers().getNickname();
+        String user = userService.getUserByEmail(principal.getName()).getNickname();
+
+        map.put("user", user);
+        map.put("writer", writer);
+        map.put("board", board);
+
+        return ResponseEntity.ok(map);
     }
 
     @PostMapping("/board/good/{id}")
     public ResponseEntity<?> boardGood(@PathVariable("id") Long id) {
+        Board board = boardService.getBoardEntity(id);
+
+        if (board == null) {
+            return ResponseEntity.ok("해당 게시글이 존재하지 않아 좋아요가 불가능합니다.");
+        }
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(URI.create("/board/" + id));
 
@@ -139,19 +145,15 @@ public class BoardController {
     ) {
         Board boardEntity = boardService.getBoardEntity(id);
 
-        if (boardEntity != null) {
-
-            if (Objects.equals(boardEntity.getUsers().getEmail(), principal.getName())) {
-                BoardResponse board = boardService.entityToDtoDetail(boardEntity);
-
-                return ResponseEntity.ok(board);
-            } else {
-                return ResponseEntity.ok("게시글 작성자와 회원님이 달라 수정이 불가능합니다.");
-            }
-
-        } else {
+        if (boardEntity == null) {
             return ResponseEntity.ok("게시글이 존재하지않아 조회가 불가능합니다.");
         }
+
+        if (!Objects.equals(boardEntity.getUsers().getEmail(), principal.getName())) {
+            return ResponseEntity.ok("게시글 작성자와 회원님이 달라 수정이 불가능합니다.");
+        }
+
+        return ResponseEntity.ok(boardService.entityToDtoDetail(boardEntity));
     }
 
     @PostMapping("/board/edit/{id}")
@@ -162,26 +164,24 @@ public class BoardController {
     ) {
         Board boardEntity = boardService.getBoardEntity(id);
 
-        if (boardEntity != null) {
-
-            if (Objects.equals(boardEntity.getUsers().getEmail(), principal.getName())) {
-                HttpHeaders httpHeaders = new HttpHeaders();
-                httpHeaders.setLocation(URI.create("/board/" + id));
-
-                boardService.editBoard(id, boardRequest);
-                log.info("게시글 id=" + id + " 수정성공");
-
-                return ResponseEntity
-                        .status(HttpStatus.MOVED_PERMANENTLY)
-                        .headers(httpHeaders)
-                        .build();
-            } else {
-                return ResponseEntity.ok("작성자와 회원님이 달라 수정이 불가능합니다.");
-            }
-
-        } else {
+        if (boardEntity == null) {
             return ResponseEntity.ok("게시글 존재하지 않아 수정이 불가능합니다.");
         }
+
+        if (!Objects.equals(boardEntity.getUsers().getEmail(), principal.getName())) {
+            return ResponseEntity.ok("작성자와 회원님이 달라 수정이 불가능합니다.");
+        }
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(URI.create("/board/" + id));
+
+        boardService.editBoard(id, boardRequest);
+        log.info("게시글 id=" + id + " 수정성공");
+
+        return ResponseEntity
+                .status(HttpStatus.MOVED_PERMANENTLY)
+                .headers(httpHeaders)
+                .build();
     }
 
     @PostMapping("/board/delete/{id}")
@@ -191,25 +191,23 @@ public class BoardController {
     ) {
         Board boardEntity = boardService.getBoardEntity(id);
 
-        if (boardEntity != null) {
-
-            if (Objects.equals(boardEntity.getUsers().getEmail(), principal.getName())) {
-                boardService.deleteBoard(id);
-                log.info("게시글 id=" + id + " 삭제 성공");
-
-                HttpHeaders httpHeaders = new HttpHeaders();
-                httpHeaders.setLocation(URI.create("/board"));
-
-                return ResponseEntity
-                        .status(HttpStatus.MOVED_PERMANENTLY)
-                        .headers(httpHeaders)
-                        .build();
-            } else {
-                return ResponseEntity.ok("작성자와 회원님이 달라 삭제가 불가능합니다.");
-            }
-
-        } else {
+        if (boardEntity == null) {
             return ResponseEntity.ok("게시글이 존재하지 않아 조회가 삭제가 불가능합니다.");
         }
+
+        if (!Objects.equals(boardEntity.getUsers().getEmail(), principal.getName())) {
+            return ResponseEntity.ok("작성자와 회원님이 달라 삭제가 불가능합니다.");
+        }
+
+        boardService.deleteBoard(id);
+        log.info("게시글 id=" + id + " 삭제 성공");
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(URI.create("/board"));
+
+        return ResponseEntity
+                .status(HttpStatus.MOVED_PERMANENTLY)
+                .headers(httpHeaders)
+                .build();
     }
 }

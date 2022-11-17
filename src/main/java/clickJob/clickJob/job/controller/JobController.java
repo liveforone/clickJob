@@ -86,19 +86,19 @@ public class JobController {
     ) {
         Job job = jobService.getJobDetail(id);
 
-        if (job != null) {
-            Map<String, Object> map = new HashMap<>();
-            String writer = job.getUsers().getNickname();
-            String user = userService.getUserByEmail(principal.getName()).getNickname();
-
-            map.put("job", jobService.entityToDtoDetail(job));
-            map.put("writer", writer);
-            map.put("user", user);
-
-            return ResponseEntity.ok(map);
-        } else {
+        if (job == null) {
             return ResponseEntity.ok("마감되었거나 존재하지 않는 채용공고 입니다.");
         }
+
+        Map<String, Object> map = new HashMap<>();
+        String writer = job.getUsers().getNickname();
+        String user = userService.getUserByEmail(principal.getName()).getNickname();
+
+        map.put("job", jobService.entityToDtoDetail(job));
+        map.put("writer", writer);
+        map.put("user", user);
+
+        return ResponseEntity.ok(map);
     }
 
     @GetMapping("/job/edit/{id}")
@@ -108,17 +108,15 @@ public class JobController {
     ) {
         Job job = jobService.getJobDetail(id);
 
-        if (job != null) {
-
-            if (Objects.equals(job.getUsers().getEmail(), principal.getName())) {
-                return ResponseEntity.ok(jobService.entityToDtoDetail(job));
-            } else {
-                return ResponseEntity.ok("작성자와 회원님이 달라 수정이 불가능합니다.");
-            }
-
-        } else {
+        if (job == null) {
             return ResponseEntity.ok("채용공고가 존재하지않아 수정이 불가능합니다.");
         }
+
+        if (!Objects.equals(job.getUsers().getEmail(), principal.getName())) {
+            return ResponseEntity.ok("작성자와 회원님이 달라 수정이 불가능합니다.");
+        }
+
+        return ResponseEntity.ok(jobService.entityToDtoDetail(job));
     }
 
     @PostMapping("/job/edit/{id}")
@@ -129,26 +127,24 @@ public class JobController {
     ) {
         Job job = jobService.getJobDetail(id);
 
-        if (job != null) {
-
-            if (Objects.equals(job.getUsers().getEmail(), principal.getName())) {
-                jobService.editJob(jobRequest, id);
-                log.info("채용 공고 수정 완료");
-
-                HttpHeaders httpHeaders = new HttpHeaders();
-                httpHeaders.setLocation(URI.create("/job/" + id));
-
-                return ResponseEntity
-                        .status(HttpStatus.MOVED_PERMANENTLY)
-                        .headers(httpHeaders)
-                        .build();
-            } else {
-                return ResponseEntity.ok("작성자와 회원님이 달라 수정이 불가능합니다.");
-            }
-
-        } else {
+        if (job == null) {
             return ResponseEntity.ok("채용공고가 존재하지않아 수정이 불가능합니다.");
         }
+
+        if (!Objects.equals(job.getUsers().getEmail(), principal.getName())) {
+            return ResponseEntity.ok("작성자와 회원님이 달라 수정이 불가능합니다.");
+        }
+
+        jobService.editJob(jobRequest, id);
+        log.info("채용 공고 수정 완료");
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(URI.create("/job/" + id));
+
+        return ResponseEntity
+                .status(HttpStatus.MOVED_PERMANENTLY)
+                .headers(httpHeaders)
+                .build();
     }
 
     @PostMapping("/job/delete/{id}")
@@ -158,25 +154,23 @@ public class JobController {
     ) {
         Job job = jobService.getJobDetail(id);
 
-        if (job != null) {
-
-            if (Objects.equals(job.getUsers().getEmail(), principal.getName())) {
-                jobService.deleteJob(id);
-                log.info("채용공고 id=" + id + " 가 마감되었습니다.");
-
-                HttpHeaders httpHeaders = new HttpHeaders();
-                httpHeaders.setLocation(URI.create("/job"));
-
-                return ResponseEntity
-                        .status(HttpStatus.MOVED_PERMANENTLY)
-                        .headers(httpHeaders)
-                        .build();
-            } else {
-                return ResponseEntity.ok("작성자와 회원님이 달라 채용공고 마감이 불가능합니다.");
-            }
-
-        } else {
+        if (job == null) {
             return ResponseEntity.ok("마감되었거나 존재하지 않는 채용공고 입니다.");
         }
+
+        if (!Objects.equals(job.getUsers().getEmail(), principal.getName())) {
+            return ResponseEntity.ok("작성자와 회원님이 달라 채용공고 마감이 불가능합니다.");
+        }
+
+        jobService.deleteJob(id);
+        log.info("채용공고 id=" + id + " 가 마감되었습니다.");
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(URI.create("/job"));
+
+        return ResponseEntity
+                .status(HttpStatus.MOVED_PERMANENTLY)
+                .headers(httpHeaders)
+                .build();
     }
 }

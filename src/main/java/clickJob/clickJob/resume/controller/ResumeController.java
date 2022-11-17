@@ -27,9 +27,7 @@ public class ResumeController {
     public ResponseEntity<?> myResume(Principal principal) {
         Resume resume = resumeService.getResume(principal.getName());
 
-        if (resume != null) {
-            return ResponseEntity.ok(resumeService.entityToDtoDetail(resume));
-        } else {
+        if (resume == null) {  //null -> 이력서 등록 페이지로 리다이렉트
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setLocation(URI.create("/resume/post"));
 
@@ -38,6 +36,8 @@ public class ResumeController {
                     .headers(httpHeaders)
                     .build();
         }
+
+        return ResponseEntity.ok(resumeService.entityToDtoDetail(resume));
     }
 
     @GetMapping("/resume/post")
@@ -66,11 +66,11 @@ public class ResumeController {
     public ResponseEntity<?> resumeEditPage(Principal principal) {
         Resume resume = resumeService.getResume(principal.getName());
 
-        if (resume != null) {
-            return ResponseEntity.ok(resumeService.entityToDtoDetail(resume));
-        } else {
+        if (resume == null) {
             return ResponseEntity.ok("이력서가 없어 수정이 불가능합니다.");
         }
+
+        return ResponseEntity.ok(resumeService.entityToDtoDetail(resume));
     }
 
     @PostMapping("/resume/edit")
