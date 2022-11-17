@@ -101,6 +101,12 @@
 /bookmark/post/{jobId} - post
 /bookmark/cancel/{jobId} - post
 ```
+### apply
+```
+/apply-list/{jobId} - get
+/my-apply - get
+/apply/{jobId} - post
+```
 
 ## Json Body
 ### users
