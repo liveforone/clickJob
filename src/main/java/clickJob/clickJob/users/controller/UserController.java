@@ -298,7 +298,7 @@ public class UserController {
 
         int checkPassword = userService.passwordDecode(password, users.getPassword());
 
-        if (checkPassword != 1) {  //PW chekc
+        if (checkPassword != 1) {  //PW check
             log.info("비밀번호 일치하지 않음.");
             return ResponseEntity.ok("비밀번호가 다릅니다. 다시 입력해주세요.");
         }
