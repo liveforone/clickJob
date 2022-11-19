@@ -21,16 +21,16 @@ public class ResumeService {
     //== entity -> dto 편의메소드 - 엔티티 하나 ==//
     public ResumeResponse entityToDtoDetail(Resume resume) {
 
-        if (resume != null) {
-            return ResumeResponse.builder()
-                    .introduction(resume.getIntroduction())
-                    .skill(resume.getSkill())
-                    .location(resume.getLocation())
-                    .academic(resume.getAcademic())
-                    .build();
-        } else {
+        if (resume == null) {
             return null;
         }
+
+        return ResumeResponse.builder()
+                .introduction(resume.getIntroduction())
+                .skill(resume.getSkill())
+                .location(resume.getLocation())
+                .academic(resume.getAcademic())
+                .build();
     }
 
     public Resume getResume(String email) {

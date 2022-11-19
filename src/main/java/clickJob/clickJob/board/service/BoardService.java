@@ -36,18 +36,18 @@ public class BoardService {
     //== entity -> dto 편의메소드2 - 엔티티 ==//
     public BoardResponse entityToDtoDetail(Board board) {
 
-        if (board != null) {
-            return BoardResponse.builder()
-                    .id(board.getId())
-                    .title(board.getTitle())
-                    .content(board.getContent())
-                    .view(board.getView())
-                    .good(board.getGood())
-                    .createdDate(board.getCreatedDate())
-                    .build();
-        } else {
+        if (board == null) {
             return null;
         }
+
+        return BoardResponse.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .view(board.getView())
+                .good(board.getGood())
+                .createdDate(board.getCreatedDate())
+                .build();
     }
 
     public Page<BoardResponse> getAllBoard(Pageable pageable) {

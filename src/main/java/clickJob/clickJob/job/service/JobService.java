@@ -37,20 +37,20 @@ public class JobService {
 
     //== entity -> dto 편의메소드2 - 엔티티 하나 ==//
     public JobResponse entityToDtoDetail(Job job) {
-        if (job != null) {
-            return JobResponse.builder()
-                    .id(job.getId())
-                    .title(job.getTitle())
-                    .content(job.getContent())
-                    .position(job.getPosition())
-                    .company(job.getCompany())
-                    .duty(job.getDuty())
-                    .volunteer(job.getVolunteer())
-                    .createdDate(job.getCreatedDate())
-                    .build();
-        } else {
+        if (job == null) {
             return null;
         }
+
+        return JobResponse.builder()
+                .id(job.getId())
+                .title(job.getTitle())
+                .content(job.getContent())
+                .position(job.getPosition())
+                .company(job.getCompany())
+                .duty(job.getDuty())
+                .volunteer(job.getVolunteer())
+                .createdDate(job.getCreatedDate())
+                .build();
     }
 
     public Page<JobResponse> getAllJob(Pageable pageable) {
