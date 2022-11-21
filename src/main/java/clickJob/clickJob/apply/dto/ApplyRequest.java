@@ -15,14 +15,6 @@ public class ApplyRequest {
     private Users users;
     private Job job;
 
-    public Apply toEntity() {
-        return Apply.builder()
-                .id(id)
-                .users(users)
-                .job(job)
-                .build();
-    }
-
     @Builder
     public ApplyRequest(Long id, Users users, Job job) {
         this.id = id;

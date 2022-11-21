@@ -25,6 +25,15 @@ public class ApplyService {
     private final UserRepository userRepository;
     private final JobRepository jobRepository;
 
+    //== dto -> entity ==//
+    public Apply dtoToEntity(ApplyRequest apply) {
+        return Apply.builder()
+                .id(apply.getId())
+                .users(apply.getUsers())
+                .job(apply.getJob())
+                .build();
+    }
+
     //entity -> dto1 - user response list ==//
     public List<ApplyUserResponse> entityToDtoListUserResponse(List<Apply> applyList) {
         List<ApplyUserResponse> list = new ArrayList<>();
@@ -78,6 +87,6 @@ public class ApplyService {
                 .users(users)
                 .build();
 
-        applyRepository.save(dto.toEntity());
+        applyRepository.save(dtoToEntity(dto));
     }
 }

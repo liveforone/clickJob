@@ -20,27 +20,8 @@ public class JobService {
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
 
-    //== entity ->  dto 편의메소드1 - 페이징 형식 ==//
-    public Page<JobResponse> entityToDtoPage(Page<Job> jobList) {
-        return jobList.map(m -> JobResponse.builder()
-                .id(m.getId())
-                .title(m.getTitle())
-                .content(m.getContent())
-                .position(m.getPosition())
-                .company(m.getCompany())
-                .duty(m.getDuty())
-                .volunteer(m.getVolunteer())
-                .createdDate(m.getCreatedDate())
-                .build()
-        );
-    }
-
-    //== entity -> dto 편의메소드2 - 엔티티 하나 ==//
-    public JobResponse entityToDtoDetail(Job job) {
-        if (job == null) {
-            return null;
-        }
-
+    //== JobResponse builder method ==//
+    public JobResponse dtoBuilder(Job job) {
         return JobResponse.builder()
                 .id(job.getId())
                 .title(job.getTitle())
@@ -51,6 +32,35 @@ public class JobService {
                 .volunteer(job.getVolunteer())
                 .createdDate(job.getCreatedDate())
                 .build();
+    }
+
+    //== dto -> entity ==//
+    public Job dtoToEntity(JobRequest job) {
+        return Job.builder()
+                .id(job.getId())
+                .title(job.getTitle())
+                .content(job.getContent())
+                .position(job.getPosition())
+                .company(job.getCompany())
+                .duty(job.getDuty())
+                .users(job.getUsers())
+                .volunteer(job.getVolunteer())
+                .build();
+    }
+
+    //== entity ->  dto 편의메소드1 - 페이징 형식 ==//
+    public Page<JobResponse> entityToDtoPage(Page<Job> jobList) {
+        return jobList.map(this::dtoBuilder
+        );
+    }
+
+    //== entity -> dto 편의메소드2 - 엔티티 하나 ==//
+    public JobResponse entityToDtoDetail(Job job) {
+        if (job == null) {
+            return null;
+        }
+
+        return dtoBuilder(job);
     }
 
     public Page<JobResponse> getAllJob(Pageable pageable) {
@@ -71,7 +81,7 @@ public class JobService {
 
         jobRequest.setUsers(users);
 
-        return jobRepository.save(jobRequest.toEntity()).getId();
+        return jobRepository.save(dtoToEntity(jobRequest)).getId();
     }
 
     @Transactional
@@ -82,7 +92,7 @@ public class JobService {
         jobRequest.setUsers(job.getUsers());
         jobRequest.setVolunteer(job.getVolunteer());
 
-        jobRepository.save(jobRequest.toEntity());
+        jobRepository.save(dtoToEntity(jobRequest));
     }
 
     @Transactional

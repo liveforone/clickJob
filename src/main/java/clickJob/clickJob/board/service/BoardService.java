@@ -20,17 +20,33 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
+    //== BoardResponse builder method ==//
+    public BoardResponse dtoBuilder(Board board) {
+        return BoardResponse.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .view(board.getView())
+                .good(board.getGood())
+                .createdDate(board.getCreatedDate())
+                .build();
+    }
+
+    //== dto -> entity ==//
+    public Board dtoToEntity(BoardRequest board) {
+        return Board.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .users(board.getUsers())
+                .view(board.getView())
+                .good(board.getGood())
+                .build();
+    }
+
     //== entity ->  dto 편의메소드1 - 페이징 ==//
     public Page<BoardResponse> entityToDtoPage(Page<Board> boardList) {
-        return boardList.map(m -> BoardResponse.builder()
-                .id(m.getId())
-                .title(m.getTitle())
-                .content(m.getContent())
-                .view(m.getView())
-                .good(m.getGood())
-                .createdDate(m.getCreatedDate())
-                .build()
-        );
+        return boardList.map(this::dtoBuilder);
     }
 
     //== entity -> dto 편의메소드2 - 엔티티 ==//
@@ -40,14 +56,7 @@ public class BoardService {
             return null;
         }
 
-        return BoardResponse.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .view(board.getView())
-                .good(board.getGood())
-                .createdDate(board.getCreatedDate())
-                .build();
+        return dtoBuilder(board);
     }
 
     public Page<BoardResponse> getAllBoard(Pageable pageable) {
@@ -76,7 +85,7 @@ public class BoardService {
 
         boardRequest.setUsers(users);
 
-        return boardRepository.save(boardRequest.toEntity()).getId();
+        return boardRepository.save(dtoToEntity(boardRequest)).getId();
     }
 
     @Transactional
@@ -93,7 +102,7 @@ public class BoardService {
         boardRequest.setGood(board.getGood());
         boardRequest.setView(board.getView());
 
-        boardRepository.save(boardRequest.toEntity());
+        boardRepository.save(dtoToEntity(boardRequest));
     }
 
     @Transactional

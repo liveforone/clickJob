@@ -23,16 +23,31 @@ public class CommentService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
+    //== CommentResponse builder method ==//
+    public CommentResponse dtoBuilder(Comment comment) {
+        return CommentResponse.builder()
+                .id(comment.getId())
+                .writer(comment.getUsers().getNickname())
+                .content(comment.getContent())
+                .good(comment.getGood())
+                .createdDate(comment.getCreatedDate())
+                .build();
+    }
+
+    //== dto -> entity ==//
+    public Comment dtoToEntity(CommentRequest comment) {
+        return Comment.builder()
+                .id(comment.getId())
+                .users(comment.getUsers())
+                .content(comment.getContent())
+                .board(comment.getBoard())
+                .good(comment.getGood())
+                .build();
+    }
+
     //== entity ->  dto 편의메소드1 - 페이징 형식 ==//
     public Page<CommentResponse> entityToDtoPage(Page<Comment> commentList) {
-        return commentList.map(m -> CommentResponse.builder()
-                .id(m.getId())
-                .writer(m.getUsers().getNickname())
-                .content(m.getContent())
-                .good(m.getGood())
-                .createdDate(m.getCreatedDate())
-                .build()
-        );
+        return commentList.map(this::dtoBuilder);
     }
 
     //== entity -> dto 편의메소드2 - 엔티티 하나 ==//
@@ -42,13 +57,7 @@ public class CommentService {
             return null;
         }
 
-        return CommentResponse.builder()
-                .id(comment.getId())
-                .writer(comment.getUsers().getNickname())
-                .content(comment.getContent())
-                .good(comment.getGood())
-                .createdDate(comment.getCreatedDate())
-                .build();
+        return dtoBuilder(comment);
     }
 
     public Page<CommentResponse> getCommentList(Long boardId, Pageable pageable) {
@@ -66,7 +75,7 @@ public class CommentService {
         commentRequest.setUsers(users);
         commentRequest.setBoard(board);
 
-        commentRepository.save(commentRequest.toEntity());
+        commentRepository.save(dtoToEntity(commentRequest));
     }
 
     @Transactional

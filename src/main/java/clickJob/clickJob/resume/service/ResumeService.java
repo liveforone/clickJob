@@ -18,6 +18,28 @@ public class ResumeService {
     private final ResumeRepository resumeRepository;
     private final UserRepository userRepository;
 
+    //== ResumeResponse builder method ==//
+    public ResumeResponse dtoBuilder(Resume resume) {
+        return ResumeResponse.builder()
+                .introduction(resume.getIntroduction())
+                .skill(resume.getSkill())
+                .location(resume.getLocation())
+                .academic(resume.getAcademic())
+                .build();
+    }
+
+    //== dto -> entity ==//
+    public Resume dtoToEntity(ResumeRequest resume) {
+        return Resume.builder()
+                    .id(resume.getId())
+                    .introduction(resume.getIntroduction())
+                    .skill(resume.getSkill())
+                    .location(resume.getLocation())
+                    .academic(resume.getAcademic())
+                    .users(resume.getUsers())
+                    .build();
+    }
+
     //== entity -> dto 편의메소드 - 엔티티 하나 ==//
     public ResumeResponse entityToDtoDetail(Resume resume) {
 
@@ -25,12 +47,7 @@ public class ResumeService {
             return null;
         }
 
-        return ResumeResponse.builder()
-                .introduction(resume.getIntroduction())
-                .skill(resume.getSkill())
-                .location(resume.getLocation())
-                .academic(resume.getAcademic())
-                .build();
+        return dtoBuilder(resume);
     }
 
     public Resume getResume(String email) {
@@ -43,7 +60,7 @@ public class ResumeService {
 
         resumeRequest.setUsers(users);
 
-        resumeRepository.save(resumeRequest.toEntity());
+        resumeRepository.save(dtoToEntity(resumeRequest));
     }
 
     @Transactional
@@ -53,6 +70,6 @@ public class ResumeService {
         resumeRequest.setId(resume.getId());
         resumeRequest.setUsers(resume.getUsers());
 
-        resumeRepository.save(resumeRequest.toEntity());
+        resumeRepository.save(dtoToEntity(resumeRequest));
     }
 }

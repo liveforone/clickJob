@@ -31,13 +31,8 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    //== entity -> dto1 - detail ==//
-    public UserResponse entityToDtoDetail(Users users) {
-
-        if (users == null) {
-            return null;
-        }
-
+    //== UserResponse builder method ==//
+    public UserResponse dtoBuilder(Users users) {
         return UserResponse.builder()
                 .id(users.getId())
                 .email(users.getEmail())
@@ -46,18 +41,33 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    //== dto -> entity ==//
+    public Users dtoToEntity(UserRequest user) {
+        return Users.builder()
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .password(user.getPassword())
+                    .auth(user.getAuth())
+                    .nickname(user.getNickname())
+                    .build();
+    }
+
+    //== entity -> dto1 - detail ==//
+    public UserResponse entityToDtoDetail(Users users) {
+
+        if (users == null) {
+            return null;
+        }
+
+        return dtoBuilder(users);
+    }
+
     //== entity -> dto2 - list ==//
     public List<UserResponse> entityToDtoList(List<Users> usersList) {
         List<UserResponse> dto = new ArrayList<>();
 
         for (Users users : usersList) {
-            UserResponse userResponse = UserResponse.builder()
-                    .id(users.getId())
-                    .email(users.getEmail())
-                    .auth(users.getAuth())
-                    .nickname(users.getNickname())
-                    .build();
-            dto.add(userResponse);
+            dto.add(dtoBuilder(users));
         }
 
         return dto;
@@ -124,7 +134,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
-    //== 유저 responsedto 반환 ==//
+    //== 유저 responseDto 반환 ==//
     public UserResponse getUserByEmail(String email) {
         return entityToDtoDetail(userRepository.findByEmail(email));
     }
@@ -144,14 +154,14 @@ public class UserService implements UserDetailsService {
 
     //== 회원 가입 로직 ==//
     @Transactional
-    public Long joinUser(UserRequest userRequest) {
+    public void joinUser(UserRequest userRequest) {
         //비밀번호 암호화
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         userRequest.setAuth(Role.MEMBER);  //기본 권한 매핑
         userRequest.setNickname(makeRandomNickname());  //무작위 닉네임 생성
 
-        return userRepository.save(userRequest.toEntity()).getId();
+        userRepository.save(dtoToEntity(userRequest));
     }
 
     //== 로그인 - 세션과 컨텍스트홀더 사용 ==//
@@ -169,9 +179,9 @@ public class UserService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         /*
-        처음 어드민이 로그인을 하는경우 이메일로 판별해서 권한을 admin으로 변경해주고
+        처음 어드민이 로그인을 하는경우 이메일로 판별해서 권한을 admin 으로 변경해주고
         그 다음부터 어드민이 업데이트 할때에는 auth 칼럼으로 판별해서 db 업데이트 하지않고,
-        grandtedauthority 만 업데이트 해준다.
+        GrantedAuthority 만 업데이트 해준다.
          */
         if (user.getAuth() != Role.ADMIN && ("admin@breve.com").equals(email)) {
             authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
