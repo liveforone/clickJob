@@ -240,3 +240,7 @@ comment -> users(다대일), board(다대일)
 * 이 if문을 그대로 사용하며 가독성을 정말 너무너무 좋게 만들 수 있는 스타일이다.
 * 이것에 완전히 흠뻑 빠져버렸고, 그 스타일에 대해 내가 정리를 한 링크를 아래에 달았다.
 * [gate way 스타일 가이드](https://github.com/liveforone/study/blob/main/spring/%EB%8D%94%20%EC%A2%8B%EC%9D%80%20%EB%B6%84%EA%B8%B0%EB%AC%B8.md)
+
+# 5. 새롭게 추가한점
+* dto -> entity 메소드 서비스로직으로 이동 후 서비스 로직에서 처리
+* 반복되는 entity -> dto builder 를 함수화 해서 불필요한 반복을 줄임.
