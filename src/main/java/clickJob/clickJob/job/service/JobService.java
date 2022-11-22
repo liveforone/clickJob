@@ -50,8 +50,7 @@ public class JobService {
 
     //== entity ->  dto 편의메소드1 - 페이징 형식 ==//
     public Page<JobResponse> entityToDtoPage(Page<Job> jobList) {
-        return jobList.map(this::dtoBuilder
-        );
+        return jobList.map(this::dtoBuilder);
     }
 
     //== entity -> dto 편의메소드2 - 엔티티 하나 ==//
