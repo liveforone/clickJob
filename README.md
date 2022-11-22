@@ -42,7 +42,7 @@
 /user/signup - get/post
 /user/login - get/post
 /user/prohibition - get
-/user/mypage - get
+/user/my-page - get
 /user/profile/{nickname} - get
 /user/nickname-post - post
 /user/search - get, param : string nickname
