@@ -29,7 +29,9 @@ public class ResumeController {
 
         if (resume == null) {  //null -> 이력서 등록 페이지로 리다이렉트
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setLocation(URI.create("/resume/post"));
+            httpHeaders.setLocation(URI.create(
+                    "/resume/post"
+            ));
 
             return ResponseEntity
                     .status(HttpStatus.MOVED_PERMANENTLY)
@@ -37,7 +39,9 @@ public class ResumeController {
                     .build();
         }
 
-        return ResponseEntity.ok(resumeService.entityToDtoDetail(resume));
+        return ResponseEntity.ok(
+                resumeService.entityToDtoDetail(resume)
+        );
     }
 
     @GetMapping("/resume/post")
@@ -50,7 +54,10 @@ public class ResumeController {
             @RequestBody ResumeRequest resumeRequest,
             Principal principal
             ) {
-        resumeService.saveResume(resumeRequest, principal.getName());
+        resumeService.saveResume(
+                resumeRequest,
+                principal.getName()
+        );
         log.info("이력서 작성 성공");
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -70,7 +77,9 @@ public class ResumeController {
             return ResponseEntity.ok("이력서가 없어 수정이 불가능합니다.");
         }
 
-        return ResponseEntity.ok(resumeService.entityToDtoDetail(resume));
+        return ResponseEntity.ok(
+                resumeService.entityToDtoDetail(resume)
+        );
     }
 
     @PostMapping("/resume/edit")
@@ -78,7 +87,10 @@ public class ResumeController {
             @RequestBody ResumeRequest resumeRequest,
             Principal principal
     ) {
-        resumeService.editResume(resumeRequest, principal.getName());
+        resumeService.editResume(
+                resumeRequest,
+                principal.getName()
+        );
         log.info("이력서 수정 성공");
 
         HttpHeaders httpHeaders = new HttpHeaders();

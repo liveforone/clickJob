@@ -28,7 +28,8 @@ public class BookmarkController {
 
     @GetMapping("/my-bookmark")
     public ResponseEntity<Map<String, Object>> myBookmark(Principal principal) {
-        Map<String, Object> bookmarkList = bookmarkService.getBookmarkList(principal.getName());
+        Map<String, Object> bookmarkList =
+                bookmarkService.getBookmarkList(principal.getName());
 
         return ResponseEntity.ok(bookmarkList);
     }
@@ -42,7 +43,8 @@ public class BookmarkController {
         Bookmark bookmark = bookmarkService.getBookmark(principal.getName(), jobId);
 
         if (job == null) {
-            return ResponseEntity.ok("해당 채용 공고를 찾을 수 없어 북마킹이 불가능합니다.");
+            return ResponseEntity
+                    .ok("해당 채용 공고를 찾을 수 없어 북마킹이 불가능합니다.");
         }
 
         if (bookmark != null) {  //중복될 때
@@ -50,9 +52,14 @@ public class BookmarkController {
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/job/" + jobId));
+        httpHeaders.setLocation(URI.create(
+                "/job/" + jobId
+        ));
 
-        bookmarkService.saveBookmark(principal.getName(), jobId);
+        bookmarkService.saveBookmark(
+                principal.getName(),
+                jobId
+        );
         log.info("북마킹 성공!!");
 
         return ResponseEntity
@@ -78,9 +85,11 @@ public class BookmarkController {
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/job/" + jobId));
+        httpHeaders.setLocation(URI.create(
+                "/job/" + jobId
+        ));
 
-        bookmarkService.bookmarkCancel(bookmark.getId());
+        bookmarkService.cancelBookmark(bookmark.getId());
         log.info("북마크 삭제 성공!!");
 
         return ResponseEntity

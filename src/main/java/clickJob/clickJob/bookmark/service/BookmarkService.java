@@ -42,7 +42,9 @@ public class BookmarkService {
     }
 
     public Map<String, Object> getBookmarkList(String email) {
-        return entityToMap(bookmarkRepository.findByUserEmail(email));
+        return entityToMap(
+                bookmarkRepository.findByUserEmail(email)
+        );
     }
 
     public Bookmark getBookmark(String email, Long jobId) {
@@ -66,7 +68,7 @@ public class BookmarkService {
     }
 
     @Transactional
-    public void bookmarkCancel(Long id) {
+    public void cancelBookmark(Long id) {
         bookmarkRepository.deleteById(id);
     }
 }

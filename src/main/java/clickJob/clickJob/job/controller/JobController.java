@@ -64,11 +64,16 @@ public class JobController {
             @RequestBody JobRequest jobRequest,
             Principal principal
     ) {
-        Long jobId = jobService.saveJob(jobRequest, principal.getName());
+        Long jobId = jobService.saveJob(
+                jobRequest,
+                principal.getName()
+        );
         log.info("채용 공고 작성 성공");
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/job/" + jobId));
+        httpHeaders.setLocation(URI.create(
+                "/job/" + jobId
+        ));
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)
@@ -116,7 +121,9 @@ public class JobController {
             return ResponseEntity.ok("작성자와 회원님이 달라 수정이 불가능합니다.");
         }
 
-        return ResponseEntity.ok(jobService.entityToDtoDetail(job));
+        return ResponseEntity.ok(
+                jobService.entityToDtoDetail(job)
+        );
     }
 
     @PostMapping("/job/edit/{id}")
@@ -135,11 +142,16 @@ public class JobController {
             return ResponseEntity.ok("작성자와 회원님이 달라 수정이 불가능합니다.");
         }
 
-        jobService.editJob(jobRequest, id);
+        jobService.editJob(
+                jobRequest,
+                id
+        );
         log.info("채용 공고 수정 완료");
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/job/" + id));
+        httpHeaders.setLocation(URI.create(
+                "/job/" + id
+        ));
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)
@@ -159,7 +171,8 @@ public class JobController {
         }
 
         if (!Objects.equals(job.getUsers().getEmail(), principal.getName())) {
-            return ResponseEntity.ok("작성자와 회원님이 달라 채용공고 마감이 불가능합니다.");
+            return ResponseEntity
+                    .ok("작성자와 회원님이 달라 채용공고 마감이 불가능합니다.");
         }
 
         jobService.deleteJob(id);

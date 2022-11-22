@@ -14,7 +14,7 @@ public interface BoardRepository extends JpaRepository<Board,Long> {
     Page<Board> findAllBoard(Pageable pageable);
 
     @Query("select b from Board b join b.users where b.title like %:title%")
-    Page<Board> findSearchByTitle(@Param("title") String keyword, Pageable pageable);
+    Page<Board> searchByTitle(@Param("title") String keyword, Pageable pageable);
 
     @Query("select b from Board b join b.users u where u.email = :email")
     Page<Board> findBoardByEmail(@Param("email") String email, Pageable pageable);

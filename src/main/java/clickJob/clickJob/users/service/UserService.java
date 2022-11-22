@@ -80,7 +80,7 @@ public class UserService implements UserDetailsService {
 
     //== 이메일 중복 검증 ==//
     @Transactional(readOnly = true)
-    public int checkSameEmail(String email) {
+    public int checkDuplicateEmail(String email) {
         Users users = userRepository.findByEmail(email);
 
         if (users == null) {
@@ -92,7 +92,7 @@ public class UserService implements UserDetailsService {
 
     //== 닉네임 중복 검증 ==//
     @Transactional(readOnly = true)
-    public int checkSameNickname(String nickname) {
+    public int checkDuplicateNickname(String nickname) {
         Users users = userRepository.findByNickname(nickname);
 
         if (users == null) {
@@ -103,7 +103,7 @@ public class UserService implements UserDetailsService {
     }
 
     //== 비밀번호 복호화 ==//
-    public int passwordDecode(String inputPassword, String password) {
+    public int checkPasswordMatching(String inputPassword, String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         if(encoder.matches(inputPassword, password)) {
@@ -122,11 +122,14 @@ public class UserService implements UserDetailsService {
 
         if (users.getAuth() == Role.ADMIN) {  //어드민 아이디 지정됨, 비밀번호는 회원가입해야함
             authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
-        } else {
-            authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
         }
+        authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
 
-        return new User(users.getEmail(), users.getPassword(), authorities);
+        return new User(
+                users.getEmail(),
+                users.getPassword(),
+                authorities
+        );
     }
 
     //== 유저 엔티티 반환 ==//
@@ -136,11 +139,15 @@ public class UserService implements UserDetailsService {
 
     //== 유저 responseDto 반환 ==//
     public UserResponse getUserByEmail(String email) {
-        return entityToDtoDetail(userRepository.findByEmail(email));
+        return entityToDtoDetail(
+                userRepository.findByEmail(email)
+        );
     }
 
     public List<UserResponse> getUserListByNickName(String nickname) {
-        return entityToDtoList(userRepository.findSearchByNickName(nickname));
+        return entityToDtoList(
+                userRepository.searchByNickName(nickname)
+        );
     }
 
     //== 전체 유저 리턴 for admin ==//
@@ -149,7 +156,9 @@ public class UserService implements UserDetailsService {
     }
 
     public UserResponse getUserByNickname(String nickname) {
-        return entityToDtoDetail(userRepository.findByNickname(nickname));
+        return entityToDtoDetail(
+                userRepository.findByNickname(nickname)
+        );
     }
 
     //== 회원 가입 로직 ==//
@@ -161,21 +170,28 @@ public class UserService implements UserDetailsService {
         userRequest.setAuth(Role.MEMBER);  //기본 권한 매핑
         userRequest.setNickname(makeRandomNickname());  //무작위 닉네임 생성
 
-        userRepository.save(dtoToEntity(userRequest));
+        userRepository.save(
+                dtoToEntity(userRequest)
+        );
     }
 
     //== 로그인 - 세션과 컨텍스트홀더 사용 ==//
     @Transactional
-    public void login(UserRequest userRequest, HttpSession httpSession) throws UsernameNotFoundException {
+    public void login(UserRequest userRequest, HttpSession httpSession)
+            throws UsernameNotFoundException
+    {
 
         String email = userRequest.getEmail();
         String password = userRequest.getPassword();
         Users user = userRepository.findByEmail(email);
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
+        UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(email, password);
         SecurityContextHolder.getContext().setAuthentication(token);
-        httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-                SecurityContextHolder.getContext());
+        httpSession.setAttribute(
+                HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                SecurityContextHolder.getContext()
+        );
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         /*
@@ -188,10 +204,14 @@ public class UserService implements UserDetailsService {
             userRepository.updateAuth(Role.ADMIN, userRequest.getEmail());
         } else if (user.getAuth() == Role.ADMIN) {
             authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
-        } else {
-            authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
         }
-        new User(user.getEmail(), user.getPassword(), authorities);
+        authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
+
+        new User(
+                user.getEmail(),
+                user.getPassword(),
+                authorities
+        );
     }
 
     @Transactional

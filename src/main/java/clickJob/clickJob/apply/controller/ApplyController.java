@@ -44,7 +44,8 @@ public class ApplyController {
         }
 
         if (!Objects.equals(job.getUsers().getEmail(), principal.getName())) {
-            return ResponseEntity.ok("작성자와 회원님이 달라 구직신청 리스트를 볼 수 없습니다.");
+            return ResponseEntity
+                    .ok("작성자와 회원님이 달라 구직신청 리스트를 볼 수 없습니다.");
         }
 
         List<ApplyJobResponse> applyList = applyService.getApplyJobList(jobId);
@@ -54,7 +55,8 @@ public class ApplyController {
 
     @GetMapping("/my-apply")
     public ResponseEntity<?> getApplyListForMyPage(Principal principal) {
-        List<ApplyUserResponse> applyList = applyService.getApplyUserList(principal.getName());
+        List<ApplyUserResponse> applyList =
+                applyService.getApplyUserList(principal.getName());
 
         return ResponseEntity.ok(applyList);
     }
@@ -65,7 +67,7 @@ public class ApplyController {
             Principal principal
     ) {
         Job job = jobService.getJobDetail(jobId);
-        Apply apply = applyService.getApplyDetail(jobId, principal.getName());
+        Apply apply = applyService.getApplyEntity(jobId, principal.getName());
 
         if (job == null) {
             return ResponseEntity.ok("해당 채용공고가 없어 구직신청이 불가능합니다.");
@@ -76,9 +78,14 @@ public class ApplyController {
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/job/" + jobId));
+        httpHeaders.setLocation(URI.create(
+                "/job/" + jobId
+        ));
 
-        applyService.applyJob(jobId, principal.getName());
+        applyService.applyJob(
+                jobId,
+                principal.getName()
+        );
         jobService.updateVolunteer(jobId);
         log.info("구직 신청 성공!!");
 

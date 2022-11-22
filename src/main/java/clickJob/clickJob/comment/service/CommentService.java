@@ -61,7 +61,12 @@ public class CommentService {
     }
 
     public Page<CommentResponse> getCommentList(Long boardId, Pageable pageable) {
-        return entityToDtoPage(commentRepository.findByBoardId(boardId, pageable));
+        return entityToDtoPage(
+                commentRepository.findByBoardId(
+                        boardId,
+                        pageable
+                )
+        );
     }
 
     public Comment getCommentEntity(Long id) {
@@ -75,7 +80,9 @@ public class CommentService {
         commentRequest.setUsers(users);
         commentRequest.setBoard(board);
 
-        commentRepository.save(dtoToEntity(commentRequest));
+        commentRepository.save(
+                dtoToEntity(commentRequest)
+        );
     }
 
     @Transactional

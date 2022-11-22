@@ -70,7 +70,7 @@ public class ApplyService {
         return entityToDtoJobResponse(applyRepository.findApplyByJobId(jobId));
     }
 
-    public Apply getApplyDetail(Long jobId, String email) {
+    public Apply getApplyEntity(Long jobId, String email) {
         Job job = jobRepository.findOneById(jobId);
         Users users = userRepository.findByEmail(email);
 
@@ -87,6 +87,8 @@ public class ApplyService {
                 .users(users)
                 .build();
 
-        applyRepository.save(dtoToEntity(dto));
+        applyRepository.save(
+                dtoToEntity(dto)
+        );
     }
 }

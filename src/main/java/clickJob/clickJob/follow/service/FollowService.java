@@ -68,7 +68,7 @@ public class FollowService {
     }
     
     //== follow detail ==//
-    public Follow getFollowDetail(String followerEmail, String userNickname) {
+    public Follow getFollowEntity(String followerEmail, String userNickname) {
         Users me = userRepository.findByEmail(followerEmail);  //나
         Users myFollow = userRepository.findByNickname(userNickname);  //나의 팔로잉, 팔로잉 당하는 사람
         

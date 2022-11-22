@@ -84,7 +84,9 @@ public class BoardController {
         log.info("게시글 저장 성공");
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/board/" + boardId));
+        httpHeaders.setLocation(URI.create(
+                "/board/" + boardId
+        ));
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)
@@ -127,7 +129,9 @@ public class BoardController {
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/board/" + id));
+        httpHeaders.setLocation(URI.create(
+                "/board/" + id
+        ));
 
         boardService.updateGood(id);
         log.info("게시글 좋아요 업데이트 성공");
@@ -153,7 +157,9 @@ public class BoardController {
             return ResponseEntity.ok("게시글 작성자와 회원님이 달라 수정이 불가능합니다.");
         }
 
-        return ResponseEntity.ok(boardService.entityToDtoDetail(boardEntity));
+        return ResponseEntity.ok(
+                boardService.entityToDtoDetail(boardEntity)
+        );
     }
 
     @PostMapping("/board/edit/{id}")
@@ -173,9 +179,14 @@ public class BoardController {
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/board/" + id));
+        httpHeaders.setLocation(URI.create(
+                "/board/" + id
+        ));
 
-        boardService.editBoard(id, boardRequest);
+        boardService.editBoard(
+                id,
+                boardRequest
+        );
         log.info("게시글 id=" + id + " 수정성공");
 
         return ResponseEntity
@@ -192,7 +203,8 @@ public class BoardController {
         Board boardEntity = boardService.getBoardEntity(id);
 
         if (boardEntity == null) {
-            return ResponseEntity.ok("게시글이 존재하지 않아 조회가 삭제가 불가능합니다.");
+            return ResponseEntity
+                    .ok("게시글이 존재하지 않아 조회가 삭제가 불가능합니다.");
         }
 
         if (!Objects.equals(boardEntity.getUsers().getEmail(), principal.getName())) {
@@ -203,7 +215,9 @@ public class BoardController {
         log.info("게시글 id=" + id + " 삭제 성공");
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/board"));
+        httpHeaders.setLocation(URI.create(
+                "/board"
+        ));
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)

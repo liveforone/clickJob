@@ -44,7 +44,10 @@ public class CommentController {
             Principal principal
     ) {
         Map<String, Object> map = new HashMap<>();
-        Page<CommentResponse> commentList = commentService.getCommentList(boardId, pageable);
+        Page<CommentResponse> commentList = commentService.getCommentList(
+                boardId,
+                pageable
+        );
         String user = userService.getUserByEmail(principal.getName()).getNickname();
 
         map.put("user", user);
@@ -66,9 +69,15 @@ public class CommentController {
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/comment/" + boardId));
+        httpHeaders.setLocation(URI.create(
+                "/comment/" + boardId
+        ));
 
-        commentService.saveComment(commentRequest, principal.getName(), boardId);
+        commentService.saveComment(
+                commentRequest,
+                principal.getName(),
+                boardId
+        );
         log.info("댓글 저장 성공!!");
 
         return ResponseEntity
@@ -79,9 +88,16 @@ public class CommentController {
 
     @GetMapping("/comment/edit/{id}")
     public ResponseEntity<?> commentEditPage(@PathVariable("id") Long id) {
-        CommentResponse comment = commentService.entityToDtoDetail(commentService.getCommentEntity(id));
+        CommentResponse comment = commentService.entityToDtoDetail(
+                commentService.getCommentEntity(id)
+        );
 
-        return ResponseEntity.ok(Objects.requireNonNullElse(comment, "해당 댓글을 찾을 수 없습니다."));
+        return ResponseEntity.ok(
+                Objects.requireNonNullElse(
+                        comment,
+                        "해당 댓글을 찾을 수 없습니다."
+                )
+        );
     }
 
     /*
@@ -105,9 +121,14 @@ public class CommentController {
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/comment/" + comment.getBoard().getId()));
+        httpHeaders.setLocation(URI.create(
+                "/comment/" + comment.getBoard().getId()
+        ));
 
-        commentService.editComment(content, id);
+        commentService.editComment(
+                content,
+                id
+        );
         log.info("댓글 수정 성공 !!");
 
         return ResponseEntity
@@ -125,7 +146,9 @@ public class CommentController {
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/comment/" + comment.getBoard().getId()));
+        httpHeaders.setLocation(URI.create(
+                "/comment/" + comment.getBoard().getId()
+        ));
 
         commentService.updateGood(id);
         log.info("댓글 좋아요 업데이트 성공!!");
@@ -149,7 +172,8 @@ public class CommentController {
         }
 
         if (!Objects.equals(comment.getUsers().getNickname(), user)) {
-            return ResponseEntity.ok("회원님과 작성자가 서로 달라 댓글 삭제가 불가능합니다.");
+            return ResponseEntity
+                    .ok("회원님과 작성자가 서로 달라 댓글 삭제가 불가능합니다.");
         }
 
         Long boardId = comment.getBoard().getId();
@@ -158,7 +182,9 @@ public class CommentController {
         log.info("댓글 삭제완료 !!");
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/comment/" + boardId));
+        httpHeaders.setLocation(URI.create(
+                "/comment/" + boardId
+        ));
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)

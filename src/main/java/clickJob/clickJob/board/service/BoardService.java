@@ -60,19 +60,36 @@ public class BoardService {
     }
 
     public Page<BoardResponse> getAllBoard(Pageable pageable) {
-        return entityToDtoPage(boardRepository.findAllBoard(pageable));
+        return entityToDtoPage(
+                boardRepository.findAllBoard(pageable)
+        );
     }
 
     public Page<BoardResponse> getSearchList(String keyword, Pageable pageable) {
-        return entityToDtoPage(boardRepository.findSearchByTitle(keyword, pageable));
+        return entityToDtoPage(
+                boardRepository.searchByTitle(
+                    keyword,
+                    pageable
+                )
+        );
     }
 
     public Page<BoardResponse> getBoardByEmail(String email, Pageable pageable) {
-        return entityToDtoPage(boardRepository.findBoardByEmail(email, pageable));
+        return entityToDtoPage(
+                boardRepository.findBoardByEmail(
+                    email,
+                    pageable
+                )
+        );
     }
 
     public Page<BoardResponse> getBoardByNickname(String nickname, Pageable pageable) {
-        return entityToDtoPage(boardRepository.findBoardByNickname(nickname, pageable));
+        return entityToDtoPage(
+                boardRepository.findBoardByNickname(
+                    nickname,
+                    pageable
+                )
+        );
     }
 
     public Board getBoardEntity(Long id) {
@@ -85,7 +102,8 @@ public class BoardService {
 
         boardRequest.setUsers(users);
 
-        return boardRepository.save(dtoToEntity(boardRequest)).getId();
+        return boardRepository.save(
+                dtoToEntity(boardRequest)).getId();
     }
 
     @Transactional
@@ -102,7 +120,9 @@ public class BoardService {
         boardRequest.setGood(board.getGood());
         boardRequest.setView(board.getView());
 
-        boardRepository.save(dtoToEntity(boardRequest));
+        boardRepository.save(
+                dtoToEntity(boardRequest)
+        );
     }
 
     @Transactional

@@ -60,7 +60,9 @@ public class ResumeService {
 
         resumeRequest.setUsers(users);
 
-        resumeRepository.save(dtoToEntity(resumeRequest));
+        resumeRepository.save(
+                dtoToEntity(resumeRequest)
+        );
     }
 
     @Transactional
@@ -70,6 +72,8 @@ public class ResumeService {
         resumeRequest.setId(resume.getId());
         resumeRequest.setUsers(resume.getUsers());
 
-        resumeRepository.save(dtoToEntity(resumeRequest));
+        resumeRepository.save(
+                dtoToEntity(resumeRequest)
+        );
     }
 }

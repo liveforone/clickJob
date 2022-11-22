@@ -64,11 +64,18 @@ public class JobService {
     }
 
     public Page<JobResponse> getAllJob(Pageable pageable) {
-        return entityToDtoPage(jobRepository.findAll(pageable));
+        return entityToDtoPage(
+                jobRepository.findAll(pageable)
+        );
     }
 
     public Page<JobResponse> getJobSearchList(String keyword, Pageable pageable) {
-        return entityToDtoPage(jobRepository.findSearchByTitle(keyword, pageable));
+        return entityToDtoPage(
+                jobRepository.searchByTitle(
+                        keyword,
+                        pageable
+                )
+        );
     }
 
     public Job getJobDetail(Long id) {
@@ -81,7 +88,8 @@ public class JobService {
 
         jobRequest.setUsers(users);
 
-        return jobRepository.save(dtoToEntity(jobRequest)).getId();
+        return jobRepository.save(
+                dtoToEntity(jobRequest)).getId();
     }
 
     @Transactional
@@ -92,7 +100,9 @@ public class JobService {
         jobRequest.setUsers(job.getUsers());
         jobRequest.setVolunteer(job.getVolunteer());
 
-        jobRepository.save(dtoToEntity(jobRequest));
+        jobRepository.save(
+                dtoToEntity(jobRequest)
+        );
     }
 
     @Transactional
