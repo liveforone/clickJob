@@ -36,8 +36,8 @@ public class UserController {
     private final UserService userService;
     private final BoardService boardService;
 
-    public final static int NOT_DUPLICATE = 1;
-    public final static int PASSWORD_MATCH = 1;
+    public static final int NOT_DUPLICATE = 1;
+    public static final int PASSWORD_MATCH = 1;
 
     //== 메인 페이지 ==//
     @GetMapping("/")
