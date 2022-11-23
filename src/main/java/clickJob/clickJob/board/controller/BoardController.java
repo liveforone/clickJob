@@ -79,7 +79,7 @@ public class BoardController {
     public ResponseEntity<?> boardPost(
             @RequestBody BoardRequest boardRequest,
             Principal principal
-            ) {
+    ) {
         Long boardId = boardService.saveBoard(boardRequest, principal.getName());
         log.info("게시글 저장 성공");
 

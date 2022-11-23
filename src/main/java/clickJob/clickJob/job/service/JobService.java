@@ -58,7 +58,6 @@ public class JobService {
         if (job == null) {
             return null;
         }
-
         return dtoBuilder(job);
     }
 

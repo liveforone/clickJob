@@ -53,7 +53,7 @@ public class ResumeController {
     public ResponseEntity<?> resumePost(
             @RequestBody ResumeRequest resumeRequest,
             Principal principal
-            ) {
+    ) {
         resumeService.saveResume(
                 resumeRequest,
                 principal.getName()

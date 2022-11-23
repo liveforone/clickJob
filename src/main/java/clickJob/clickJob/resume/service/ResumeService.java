@@ -46,7 +46,6 @@ public class ResumeService {
         if (resume == null) {
             return null;
         }
-
         return dtoBuilder(resume);
     }
 

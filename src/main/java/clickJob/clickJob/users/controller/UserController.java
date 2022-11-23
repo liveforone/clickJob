@@ -36,6 +36,9 @@ public class UserController {
     private final UserService userService;
     private final BoardService boardService;
 
+    public final static int NOT_DUPLICATE = 1;
+    public final static int PASSWORD_MATCH = 1;
+
     //== 메인 페이지 ==//
     @GetMapping("/")
     public ResponseEntity<?> home() {
@@ -53,7 +56,7 @@ public class UserController {
     public ResponseEntity<?> signup(@RequestBody UserRequest userRequest) {
         int checkEmail = userService.checkDuplicateEmail(userRequest.getEmail());
 
-        if (checkEmail != 1) {  //이메일 중복 check
+        if (checkEmail != NOT_DUPLICATE) {  //이메일 중복 check
             return ResponseEntity
                     .ok("중복되는 이메일이 있어 회원가입이 불가능합니다.");
         }
@@ -93,7 +96,7 @@ public class UserController {
                 users.getPassword()
         );
 
-        if (checkPassword != 1) {  //PW check
+        if (checkPassword != PASSWORD_MATCH) {  //PW check
             return ResponseEntity.ok("비밀번호가 일치하지 않습니다.");
         }
 
@@ -185,7 +188,7 @@ public class UserController {
     ) {
         int checkNickname = userService.checkDuplicateNickname(nickname);
 
-        if (checkNickname != 1) {  //이메일 중복 check
+        if (checkNickname != NOT_DUPLICATE) {  //이메일 중복 check
             return ResponseEntity
                     .ok("중복되는 닉네임이 있어 수정 불가능합니다.");
         }
@@ -255,7 +258,7 @@ public class UserController {
                 users.getPassword()
         );
 
-        if (checkPassword != 1) {  //PW check
+        if (checkPassword != PASSWORD_MATCH) {
             log.info("비밀번호 일치하지 않음.");
             return ResponseEntity.ok("비밀번호가 다릅니다. 다시 입력해주세요.");
         }
@@ -282,7 +285,7 @@ public class UserController {
     public ResponseEntity<?> changePassword(
             @RequestBody UserChangePasswordRequest userRequest,
             Principal principal
-            ) {
+    ) {
         Users users = userService.getUserEntity(principal.getName());
 
         if (users == null) {
@@ -295,7 +298,7 @@ public class UserController {
                 users.getPassword()
         );
 
-        if (checkPassword != 1) {  //PW check
+        if (checkPassword != PASSWORD_MATCH) {
             log.info("비밀번호 일치하지 않음.");
             return ResponseEntity.ok("비밀번호가 다릅니다. 다시 입력해주세요.");
         }
@@ -334,7 +337,7 @@ public class UserController {
                 users.getPassword()
         );
 
-        if (checkPassword != 1) {  //PW check
+        if (checkPassword != PASSWORD_MATCH) {
             log.info("비밀번호 일치하지 않음.");
             return ResponseEntity.ok("비밀번호가 다릅니다. 다시 입력해주세요.");
         }

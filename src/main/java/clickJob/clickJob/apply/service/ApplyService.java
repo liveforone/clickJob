@@ -63,11 +63,15 @@ public class ApplyService {
     }
 
     public List<ApplyUserResponse> getApplyUserList(String email) {
-        return entityToDtoListUserResponse(applyRepository.findApplyByUser(email));
+        return entityToDtoListUserResponse(
+                applyRepository.findApplyByUser(email)
+        );
     }
 
     public List<ApplyJobResponse> getApplyJobList(Long jobId) {
-        return entityToDtoJobResponse(applyRepository.findApplyByJobId(jobId));
+        return entityToDtoJobResponse(
+                applyRepository.findApplyByJobId(jobId)
+        );
     }
 
     public Apply getApplyEntity(Long jobId, String email) {

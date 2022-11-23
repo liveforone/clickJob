@@ -31,6 +31,11 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    public final static int DUPLICATE = 0;
+    public final static int NOT_DUPLICATE = 1;
+    public final static int PASSWORD_MATCH = 1;
+    public final static int PASSWORD_NOT_MATCH = 0;
+
     //== UserResponse builder method ==//
     public UserResponse dtoBuilder(Users users) {
         return UserResponse.builder()
@@ -58,7 +63,6 @@ public class UserService implements UserDetailsService {
         if (users == null) {
             return null;
         }
-
         return dtoBuilder(users);
     }
 
@@ -84,9 +88,9 @@ public class UserService implements UserDetailsService {
         Users users = userRepository.findByEmail(email);
 
         if (users == null) {
-            return 1;
+            return NOT_DUPLICATE;
         } else {
-            return 0;
+            return DUPLICATE;
         }
     }
 
@@ -96,9 +100,9 @@ public class UserService implements UserDetailsService {
         Users users = userRepository.findByNickname(nickname);
 
         if (users == null) {
-            return 1;
+            return NOT_DUPLICATE;
         } else {
-            return 0;
+            return DUPLICATE;
         }
     }
 
@@ -107,9 +111,9 @@ public class UserService implements UserDetailsService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         if(encoder.matches(inputPassword, password)) {
-            return 1;
+            return PASSWORD_MATCH;
         } else {
-            return 0;
+            return PASSWORD_NOT_MATCH;
         }
     }
 

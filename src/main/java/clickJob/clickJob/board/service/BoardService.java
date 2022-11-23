@@ -55,7 +55,6 @@ public class BoardService {
         if (board == null) {
             return null;
         }
-
         return dtoBuilder(board);
     }
 
