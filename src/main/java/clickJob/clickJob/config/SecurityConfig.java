@@ -49,13 +49,10 @@ public class SecurityConfig {
                 // 페이지 권한 설정
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/").permitAll()
-                .antMatchers("/job").authenticated()
+                .antMatchers("/user/signup").permitAll()
+                .antMatchers("/user/login").permitAll()
                 .antMatchers("/job/post").hasRole("MEMBER")
-                .antMatchers("/board/post").authenticated()
-                .antMatchers("/board/edit").authenticated()
-                .antMatchers("/board/delete").authenticated()
-                .antMatchers("/resume/post").authenticated()
-                .antMatchers("/mypage").authenticated()
+                .anyRequest().authenticated()
                 .and() // 로그아웃 설정
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
