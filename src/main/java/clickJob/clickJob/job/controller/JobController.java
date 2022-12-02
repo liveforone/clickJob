@@ -5,6 +5,7 @@ import clickJob.clickJob.job.dto.JobResponse;
 import clickJob.clickJob.job.model.Job;
 import clickJob.clickJob.job.service.JobService;
 import clickJob.clickJob.users.service.UserService;
+import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -91,7 +92,7 @@ public class JobController {
     ) {
         Job job = jobService.getJobDetail(id);
 
-        if (job == null) {
+        if (CommonUtils.isNull(job)) {
             return ResponseEntity.ok("마감되었거나 존재하지 않는 채용공고 입니다.");
         }
 
@@ -113,7 +114,7 @@ public class JobController {
     ) {
         Job job = jobService.getJobDetail(id);
 
-        if (job == null) {
+        if (CommonUtils.isNull(job)) {
             return ResponseEntity.ok("채용공고가 존재하지않아 수정이 불가능합니다.");
         }
 
@@ -134,7 +135,7 @@ public class JobController {
     ) {
         Job job = jobService.getJobDetail(id);
 
-        if (job == null) {
+        if (CommonUtils.isNull(job)) {
             return ResponseEntity.ok("채용공고가 존재하지않아 수정이 불가능합니다.");
         }
 
@@ -166,7 +167,7 @@ public class JobController {
     ) {
         Job job = jobService.getJobDetail(id);
 
-        if (job == null) {
+        if (CommonUtils.isNull(job)) {
             return ResponseEntity.ok("마감되었거나 존재하지 않는 채용공고 입니다.");
         }
 

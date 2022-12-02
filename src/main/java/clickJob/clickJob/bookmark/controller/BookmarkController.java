@@ -4,6 +4,7 @@ import clickJob.clickJob.bookmark.model.Bookmark;
 import clickJob.clickJob.bookmark.service.BookmarkService;
 import clickJob.clickJob.job.model.Job;
 import clickJob.clickJob.job.service.JobService;
+import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -42,12 +43,12 @@ public class BookmarkController {
         Job job = jobService.getJobDetail(jobId);
         Bookmark bookmark = bookmarkService.getBookmark(principal.getName(), jobId);
 
-        if (job == null) {
+        if (CommonUtils.isNull(job)) {
             return ResponseEntity
                     .ok("해당 채용 공고를 찾을 수 없어 북마킹이 불가능합니다.");
         }
 
-        if (bookmark != null) {  //중복될 때
+        if (!CommonUtils.isNull(bookmark)) {  //중복될 때
             return ResponseEntity.ok("이미 북마크 하였습니다.");
         }
 
@@ -76,11 +77,11 @@ public class BookmarkController {
         Job job = jobService.getJobDetail(jobId);
         Bookmark bookmark = bookmarkService.getBookmark(principal.getName(), jobId);
 
-        if (job == null) {
+        if (CommonUtils.isNull(job)) {
             return ResponseEntity.ok("해당 채용공고를 찾을 수 없어 북마크 취소가 불가능합니다.");
         }
 
-        if (bookmark == null) {
+        if (CommonUtils.isNull(bookmark)) {
             return ResponseEntity.ok("해당 북마크가 없어 북마크 취소가 불가능합니다.");
         }
 

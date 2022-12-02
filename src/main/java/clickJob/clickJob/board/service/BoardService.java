@@ -6,6 +6,7 @@ import clickJob.clickJob.board.model.Board;
 import clickJob.clickJob.board.repository.BoardRepository;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.repository.UserRepository;
+import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +53,7 @@ public class BoardService {
     //== entity -> dto 편의메소드2 - 엔티티 ==//
     public BoardResponse entityToDtoDetail(Board board) {
 
-        if (board == null) {
+        if (CommonUtils.isNull(board)) {
             return null;
         }
         return dtoBuilder(board);

@@ -6,6 +6,7 @@ import clickJob.clickJob.resume.model.Resume;
 import clickJob.clickJob.resume.repository.ResumeRepository;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.repository.UserRepository;
+import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,7 @@ public class ResumeService {
     //== entity -> dto 편의메소드 - 엔티티 하나 ==//
     public ResumeResponse entityToDtoDetail(Resume resume) {
 
-        if (resume == null) {
+        if (CommonUtils.isNull(resume)) {
             return null;
         }
         return dtoBuilder(resume);

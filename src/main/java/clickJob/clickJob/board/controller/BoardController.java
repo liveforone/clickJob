@@ -5,6 +5,7 @@ import clickJob.clickJob.board.dto.BoardResponse;
 import clickJob.clickJob.board.model.Board;
 import clickJob.clickJob.board.service.BoardService;
 import clickJob.clickJob.users.service.UserService;
+import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -101,7 +102,7 @@ public class BoardController {
     ) {
         Board boardEntity = boardService.getBoardEntity(id);
 
-        if (boardEntity == null) {
+        if (CommonUtils.isNull(boardEntity)) {
             return ResponseEntity.ok("해당 게시글이 존재하지 않아 조회가 불가능합니다.");
         }
 
@@ -124,7 +125,7 @@ public class BoardController {
     public ResponseEntity<?> boardGood(@PathVariable("id") Long id) {
         Board board = boardService.getBoardEntity(id);
 
-        if (board == null) {
+        if (CommonUtils.isNull(board)) {
             return ResponseEntity.ok("해당 게시글이 존재하지 않아 좋아요가 불가능합니다.");
         }
 
@@ -149,7 +150,7 @@ public class BoardController {
     ) {
         Board boardEntity = boardService.getBoardEntity(id);
 
-        if (boardEntity == null) {
+        if (CommonUtils.isNull(boardEntity)) {
             return ResponseEntity.ok("게시글이 존재하지않아 조회가 불가능합니다.");
         }
 
@@ -170,7 +171,7 @@ public class BoardController {
     ) {
         Board boardEntity = boardService.getBoardEntity(id);
 
-        if (boardEntity == null) {
+        if (CommonUtils.isNull(boardEntity)) {
             return ResponseEntity.ok("게시글 존재하지 않아 수정이 불가능합니다.");
         }
 
@@ -202,7 +203,7 @@ public class BoardController {
     ) {
         Board boardEntity = boardService.getBoardEntity(id);
 
-        if (boardEntity == null) {
+        if (CommonUtils.isNull(boardEntity)) {
             return ResponseEntity
                     .ok("게시글이 존재하지 않아 조회가 삭제가 불가능합니다.");
         }

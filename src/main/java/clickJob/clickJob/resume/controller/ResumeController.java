@@ -3,6 +3,7 @@ package clickJob.clickJob.resume.controller;
 import clickJob.clickJob.resume.dto.ResumeRequest;
 import clickJob.clickJob.resume.model.Resume;
 import clickJob.clickJob.resume.service.ResumeService;
+import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +28,7 @@ public class ResumeController {
     public ResponseEntity<?> myResume(Principal principal) {
         Resume resume = resumeService.getResume(principal.getName());
 
-        if (resume == null) {  //null -> 이력서 등록 페이지로 리다이렉트
+        if (CommonUtils.isNull(resume)) {  //null -> 이력서 등록 페이지로 리다이렉트
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setLocation(URI.create(
                     "/resume/post"
@@ -73,7 +74,7 @@ public class ResumeController {
     public ResponseEntity<?> resumeEditPage(Principal principal) {
         Resume resume = resumeService.getResume(principal.getName());
 
-        if (resume == null) {
+        if (CommonUtils.isNull(resume)) {
             return ResponseEntity.ok("이력서가 없어 수정이 불가능합니다.");
         }
 

@@ -6,6 +6,7 @@ import clickJob.clickJob.apply.model.Apply;
 import clickJob.clickJob.apply.service.ApplyService;
 import clickJob.clickJob.job.model.Job;
 import clickJob.clickJob.job.service.JobService;
+import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +40,7 @@ public class ApplyController {
     ) {
         Job job = jobService.getJobDetail(jobId);
 
-        if (job == null) {
+        if (CommonUtils.isNull(job)) {
             return ResponseEntity.ok("해당 채용 공고가 존재하지 않습니다.");
         }
 
@@ -58,6 +59,10 @@ public class ApplyController {
         List<ApplyUserResponse> applyList =
                 applyService.getApplyUserList(principal.getName());
 
+        if (CommonUtils.isNull(applyList)) {
+            return ResponseEntity.ok("지원한것이 없습니다.");
+        }
+
         return ResponseEntity.ok(applyList);
     }
 
@@ -69,11 +74,11 @@ public class ApplyController {
         Job job = jobService.getJobDetail(jobId);
         Apply apply = applyService.getApplyEntity(jobId, principal.getName());
 
-        if (job == null) {
+        if (CommonUtils.isNull(job)) {
             return ResponseEntity.ok("해당 채용공고가 없어 구직신청이 불가능합니다.");
         }
 
-        if (apply != null) {  //중복 될 때
+        if (!CommonUtils.isNull(apply)) {  //중복 될 때
             return ResponseEntity.ok("이미 구직신청 되었습니다.");
         }
 

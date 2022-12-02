@@ -8,6 +8,7 @@ import clickJob.clickJob.comment.model.Comment;
 import clickJob.clickJob.comment.repository.CommentRepository;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.repository.UserRepository;
+import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +54,7 @@ public class CommentService {
     //== entity -> dto 편의메소드2 - 엔티티 하나 ==//
     public CommentResponse entityToDtoDetail(Comment comment) {
 
-        if (comment == null) {
+        if (CommonUtils.isNull(comment)) {
             return null;
         }
         return dtoBuilder(comment);

@@ -6,6 +6,7 @@ import clickJob.clickJob.job.model.Job;
 import clickJob.clickJob.job.repository.JobRepository;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.repository.UserRepository;
+import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +56,7 @@ public class JobService {
 
     //== entity -> dto 편의메소드2 - 엔티티 하나 ==//
     public JobResponse entityToDtoDetail(Job job) {
-        if (job == null) {
+        if (CommonUtils.isNull(job)) {
             return null;
         }
         return dtoBuilder(job);
