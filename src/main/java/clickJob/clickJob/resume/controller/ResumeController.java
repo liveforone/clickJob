@@ -29,10 +29,8 @@ public class ResumeController {
         Resume resume = resumeService.getResume(principal.getName());
 
         if (CommonUtils.isNull(resume)) {  //null -> 이력서 등록 페이지로 리다이렉트
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setLocation(URI.create(
-                    "/resume/post"
-            ));
+            String url = "/resume/post";
+            HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
             return ResponseEntity
                     .status(HttpStatus.MOVED_PERMANENTLY)
@@ -61,8 +59,8 @@ public class ResumeController {
         );
         log.info("이력서 작성 성공");
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/my-resume"));
+        String url = "/my-resume";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)
@@ -94,8 +92,8 @@ public class ResumeController {
         );
         log.info("이력서 수정 성공");
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/my-resume"));
+        String url = "/my-resume";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)

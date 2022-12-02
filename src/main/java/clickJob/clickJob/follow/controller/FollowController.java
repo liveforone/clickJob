@@ -35,10 +35,8 @@ public class FollowController {
             return ResponseEntity.ok("이미 팔로우 되어있습니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/user/profile/" + nickname
-        ));
+        String url = "/user/profile/" + nickname;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         followService.saveFollow(
                 nickname,
@@ -86,10 +84,8 @@ public class FollowController {
             return ResponseEntity.ok("이미 이웃이 아닙니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/user/my-page"
-        ));
+        String url = "/user/my-page";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         followService.unfollow(
                 principal.getName(),

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
@@ -82,10 +81,8 @@ public class ApplyController {
             return ResponseEntity.ok("이미 구직신청 되었습니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/job/" + jobId
-        ));
+        String url = "/job/" + jobId;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         applyService.applyJob(
                 jobId,

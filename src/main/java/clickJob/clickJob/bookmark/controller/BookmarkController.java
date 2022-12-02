@@ -52,10 +52,8 @@ public class BookmarkController {
             return ResponseEntity.ok("이미 북마크 하였습니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/job/" + jobId
-        ));
+        String url = "/job/" + jobId;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         bookmarkService.saveBookmark(
                 principal.getName(),
@@ -85,10 +83,8 @@ public class BookmarkController {
             return ResponseEntity.ok("해당 북마크가 없어 북마크 취소가 불가능합니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/job/" + jobId
-        ));
+        String url = "/job/" + jobId;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         bookmarkService.cancelBookmark(bookmark.getId());
         log.info("북마크 삭제 성공!!");

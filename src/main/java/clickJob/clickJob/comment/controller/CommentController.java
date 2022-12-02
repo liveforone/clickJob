@@ -69,10 +69,8 @@ public class CommentController {
             return ResponseEntity.ok("해당 게시글이 없어 댓글작성이 불가능합니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/comment/" + boardId
-        ));
+        String url = "/comment/" + boardId;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         commentService.saveComment(
                 commentRequest,
@@ -121,10 +119,8 @@ public class CommentController {
             return ResponseEntity.ok("회원님이 댓글 작성자와 달라 수정할 수 없습니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/comment/" + comment.getBoard().getId()
-        ));
+        String url = "/comment/" + comment.getBoard().getId();
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         commentService.editComment(
                 content,
@@ -146,10 +142,8 @@ public class CommentController {
             return ResponseEntity.ok("해당 댓글이 없어 좋아요 반영이 불가능합니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/comment/" + comment.getBoard().getId()
-        ));
+        String url = "/comment/" + comment.getBoard().getId();
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         commentService.updateGood(id);
         log.info("댓글 좋아요 업데이트 성공!!");
@@ -182,10 +176,8 @@ public class CommentController {
         commentService.deleteComment(id);
         log.info("댓글 삭제완료 !!");
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/comment/" + boardId
-        ));
+        String url = "/comment/" + boardId;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)

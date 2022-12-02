@@ -84,10 +84,8 @@ public class BoardController {
         Long boardId = boardService.saveBoard(boardRequest, principal.getName());
         log.info("게시글 저장 성공");
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/board/" + boardId
-        ));
+        String url = "/board/" + boardId;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)
@@ -129,10 +127,8 @@ public class BoardController {
             return ResponseEntity.ok("해당 게시글이 존재하지 않아 좋아요가 불가능합니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/board/" + id
-        ));
+        String url = "/board/" + id;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         boardService.updateGood(id);
         log.info("게시글 좋아요 업데이트 성공");
@@ -179,10 +175,8 @@ public class BoardController {
             return ResponseEntity.ok("작성자와 회원님이 달라 수정이 불가능합니다.");
         }
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/board/" + id
-        ));
+        String url = "/board/" + id;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         boardService.editBoard(
                 id,
@@ -215,10 +209,8 @@ public class BoardController {
         boardService.deleteBoard(id);
         log.info("게시글 id=" + id + " 삭제 성공");
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/board"
-        ));
+        String url = "/board";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)

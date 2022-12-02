@@ -71,10 +71,8 @@ public class JobController {
         );
         log.info("채용 공고 작성 성공");
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/job/" + jobId
-        ));
+        String url = "/job/" + jobId;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)
@@ -149,10 +147,8 @@ public class JobController {
         );
         log.info("채용 공고 수정 완료");
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(
-                "/job/" + id
-        ));
+        String url = "/job/" + id;
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)
@@ -179,8 +175,8 @@ public class JobController {
         jobService.deleteJob(id);
         log.info("채용공고 id=" + id + " 가 마감되었습니다.");
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/job"));
+        String url = "/job";
+        HttpHeaders httpHeaders = CommonUtils.makeHeader(url);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)
