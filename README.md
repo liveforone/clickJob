@@ -1,7 +1,7 @@
 # clickJob
 > 구인 구직 플랫폼. 정규직부터 비정규직까지. 상시채용 전문 플랫폼.
 
-## 기술 스택
+# 1. 기술 스택
 * Spring Boot 2.7.5
 * Language : Java17
 * DB : MySql
@@ -12,7 +12,7 @@
 * Gradle
 * Apache commons lang3
 
-# 1. 설명
+# 2. 설명
 * 일을 잡는 구직 플랫폼이다. 링크드인에서 많이 영감을 얻었다.
 * 구인 구직도 하면서 본인의 생각을 작성할 수 있는 게시판도 있다.
 * 단순히 구직만 하는 플랫폼을 넘어 소통의 기능까지 겸비한 플랫폼이다.
@@ -20,7 +20,7 @@
 * 일정이 정해져 있는 정기 공채보다는 상시채용 위주의 구직 플랫폼이다.
 * 정기 공채의 경우 제목란에 채용 일정을 같이 기입하여 사용한다.
 
-# 2. 설계
+# 3. 설계
 * 회원은 닉네임이 존재해야하며, 닉네임 변경, id & pw 변경이 가능하여야한다.
 * 여타 구직 사이트를 참고하면 사진이 없는 것을 알 수 있다. 파일 업로드는 하지 않는다.
 * 피드에 내가 팔로우한 사람들이 올린 글만 올라와야한다.
@@ -197,7 +197,16 @@ board -> users(다대일)
 comment -> users(다대일), board(다대일)
 ```
 
-# 3. 상세 설명
+# 4. 스타일 가이드
+* 유저를 제외한 모든 객체의 [널체크](https://github.com/liveforone/study/blob/main/GoodCode/%EA%B0%9D%EC%B2%B4%20null%EC%B2%B4%ED%81%AC%EC%99%80%20%EC%A4%91%EB%B3%B5%EC%B2%B4%ED%81%AC.md) + 중복 체크
+* 함수와 긴 변수의 경우 [줄바꿈 가이드](https://github.com/liveforone/study/blob/main/GoodCode/%EC%A4%84%EB%B0%94%EA%BF%88%EC%9C%BC%EB%A1%9C%20%EA%B0%80%EB%8F%85%EC%84%B1%20%ED%96%A5%EC%83%81.md)를 지켜 작성한다.
+* 매직넘버는 전부 [상수화](https://github.com/liveforone/study/blob/main/GoodCode/%EB%A7%A4%EC%A7%81%EB%84%98%EB%B2%84%20%EC%83%81%EC%88%98%EB%A1%9C%20%ED%95%B4%EA%B2%B0.md)해서 처리한다.
+* 분기문은 반드시 [게이트웨이](https://github.com/liveforone/study/blob/main/GoodCode/%EB%8D%94%20%EC%A2%8B%EC%9D%80%20%EB%B6%84%EA%B8%B0%EB%AC%B8.md) 스타일로 한다.
+* entity -> dto 변환 편의메소드는 리스트나 페이징이 아닌 경우 컨트롤러에서 사용한다.
+* [HttpHeader 처리 함수](https://github.com/liveforone/study/blob/main/GoodCode/HttpHeaders%20%EC%83%9D%EC%84%B1%20%ED%95%A8%EC%88%98.md)
+* 스프링 시큐리티에서 권한 체크 필요한것만 매핑하고 나머지(anyRequest)는 authenticated 로 설정해 코드를 줄이고 가독성 향상한다.
+
+# 5. 상세 설명
 ## 유저 널체크 안하는 이유
 * 객체에 대한 널체킹을 진행하는데 유저에 대한 널체킹을 안하는 이유가 궁금할 수 있다.
 * 그 이유는 SecurityConfig에서 url에 진입할때 authenticated 즉 인증받은
@@ -231,7 +240,7 @@ comment -> users(다대일), board(다대일)
 * 따라서 반드시 where and 절로 detail을 db에서 찾아와 중복을 체크해주는 것이 필요하다.
 * 쿼리 예시는 [여기](#팔로우)에 있다.
 
-# 4. 나의 고민
+# 6. 나의 고민
 ## if문의 복잡성 줄이기
 * 컨트롤러에서 null-check을 하거나, 수정, 삭제 같은 경우 작성자와 현재 유저가 맞는지 판별하는 로직이 많다.
 * if - else if - else 로 가독성이 최악이다.
@@ -241,7 +250,7 @@ comment -> users(다대일), board(다대일)
 * 이것에 완전히 흠뻑 빠져버렸고, 그 스타일에 대해 내가 정리를 한 링크를 아래에 달았다.
 * [gate way 스타일 가이드](https://github.com/liveforone/study/blob/main/GoodCode/%EB%8D%94%20%EC%A2%8B%EC%9D%80%20%EB%B6%84%EA%B8%B0%EB%AC%B8.md)
 
-# 5. 새롭게 추가한점
+# 7. 새롭게 추가한점
 * dto -> entity 메소드 서비스로직으로 이동 후 서비스 로직에서 처리
 * 반복되는 entity -> dto builder 를 함수화 해서 불필요한 반복을 줄임.
 * [긴함수나 변수 줄바꿈으로 가독성 향상](https://github.com/liveforone/study/blob/main/GoodCode/%EC%A4%84%EB%B0%94%EA%BF%88%EC%9C%BC%EB%A1%9C%20%EA%B0%80%EB%8F%85%EC%84%B1%20%ED%96%A5%EC%83%81.md)
