@@ -13,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,32 +34,34 @@ public class ApplyService {
                 .build();
     }
 
+    //== ApplyUserResponse builder ==//
+    public ApplyUserResponse userDtoBuilder(Apply apply) {
+        return ApplyUserResponse.builder()
+                .company(apply.getJob().getCompany())
+                .build();
+    }
+
+    //== ApplyJobResponse builder ==//
+    public ApplyJobResponse jobDtoBuilder(Apply apply) {
+        return ApplyJobResponse.builder()
+                .name(apply.getUsers().getNickname())
+                .build();
+    }
+
     //entity -> dto1 - user response list ==//
     public List<ApplyUserResponse> entityToDtoListUserResponse(List<Apply> applyList) {
-        List<ApplyUserResponse> list = new ArrayList<>();
-
-        for (Apply apply : applyList) {
-            ApplyUserResponse dto = ApplyUserResponse.builder()
-                    .company(apply.getJob().getCompany())
-                    .build();
-            list.add(dto);
-        }
-
-        return list;
+        return applyList
+                .stream()
+                .map(this::userDtoBuilder)
+                .collect(Collectors.toList());
     }
 
     //== entity -> dto2 - job response list ==//
     public List<ApplyJobResponse> entityToDtoJobResponse(List<Apply> applyList) {
-        List<ApplyJobResponse> list = new ArrayList<>();
-
-        for (Apply apply : applyList) {
-            ApplyJobResponse dto = ApplyJobResponse.builder()
-                    .name(apply.getUsers().getNickname())
-                    .build();
-            list.add(dto);
-        }
-
-        return list;
+        return applyList
+                .stream()
+                .map(this::jobDtoBuilder)
+                .collect(Collectors.toList());
     }
 
     public List<ApplyUserResponse> getApplyUserList(String email) {
