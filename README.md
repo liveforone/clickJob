@@ -205,6 +205,7 @@ comment -> users(다대일), board(다대일)
 * entity -> dto 변환 편의메소드는 리스트나 페이징이 아닌 경우 컨트롤러에서 사용한다.
 * [HttpHeader 처리 함수](https://github.com/liveforone/study/blob/main/GoodCode/HttpHeaders%20%EC%83%9D%EC%84%B1%20%ED%95%A8%EC%88%98.md)
 * 스프링 시큐리티에서 권한 체크 필요한것만 매핑하고 나머지(anyRequest)는 authenticated 로 설정해 코드를 줄이고 가독성 향상한다.
+* Mapper 클래스에서 dtoBuilder 메소드의 경우 반드시 private 으로 설정해 접근을 제한한다.
 
 # 5. 상세 설명
 ## 유저 널체크 안하는 이유
@@ -259,4 +260,5 @@ comment -> users(다대일), board(다대일)
 * HttpHeaders 축약 함수로 가독성 및 중복코드 제거함.
 * 스타일 가이드 추가함.
 * 향상된 for-each 문을 람다 for-each로 바꾸어 가독성 향상함.
-* dto 직접조회로 성능 및 가독성 향상함.
+* [dto 직접조회](https://github.com/liveforone/study/blob/main/GoodCode/dto%20%EC%A7%81%EC%A0%91%EC%A1%B0%ED%9A%8C%EB%A5%BC%20%EC%95%A0%EC%9A%A9%ED%95%98%EC%9E%90.md)로 성능 및 가독성 향상함.
+* mapper 클래스와 XxUtils 클래스를 만들어서 dto <-> entity 로직은 mapper로, transaction 이 걸리지 않는 로직은 XxUtils로 모듈화 하여 서비스로직의 가독성향상과 모듈화로 객체지향을 더욱 지킴.
