@@ -259,3 +259,4 @@ comment -> users(다대일), board(다대일)
 * HttpHeaders 축약 함수로 가독성 및 중복코드 제거함.
 * 스타일 가이드 추가함.
 * 향상된 for-each 문을 람다 for-each로 바꾸어 가독성 향상함.
+* dto 직접조회로 성능 및 가독성 향상함.
