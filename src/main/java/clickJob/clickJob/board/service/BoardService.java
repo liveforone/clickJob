@@ -50,7 +50,7 @@ public class BoardService {
         return boardList.map(this::dtoBuilder);
     }
 
-    //== entity -> dto 편의메소드2 - 엔티티 ==//
+    //== entity -> dto 편의메소드2 - detail ==//
     public BoardResponse entityToDtoDetail(Board board) {
 
         if (CommonUtils.isNull(board)) {

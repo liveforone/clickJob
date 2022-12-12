@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,16 +86,13 @@ public class CommentController {
 
     @GetMapping("/comment/edit/{id}")
     public ResponseEntity<?> commentEditPage(@PathVariable("id") Long id) {
-        CommentResponse comment = commentService.entityToDtoDetail(
-                commentService.getCommentEntity(id)
-        );
+        Comment comment = commentService.getCommentEntity(id);
 
-        return ResponseEntity.ok(
-                Objects.requireNonNullElse(
-                        comment,
-                        "해당 댓글을 찾을 수 없습니다."
-                )
-        );
+        if (CommonUtils.isNull(comment)) {
+            return ResponseEntity.ok("해당 댓글을 찾을 수 없습니다.");
+        }
+
+        return ResponseEntity.ok(commentService.entityToDtoDetail(comment));
     }
 
     /*

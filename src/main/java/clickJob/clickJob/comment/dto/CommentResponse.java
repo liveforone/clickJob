@@ -1,14 +1,15 @@
 package clickJob.clickJob.comment.dto;
 
-import clickJob.clickJob.board.model.Board;
-import clickJob.clickJob.users.model.Users;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class CommentResponse {
 
     private Long id;
@@ -16,13 +17,4 @@ public class CommentResponse {
     private String writer;
     private int good;
     private LocalDateTime createdDate;
-
-    @Builder
-    public CommentResponse(Long id, String content, String writer, int good, LocalDateTime createdDate) {
-        this.id = id;
-        this.content = content;
-        this.writer = writer;
-        this.good = good;
-        this.createdDate = createdDate;
-    }
 }

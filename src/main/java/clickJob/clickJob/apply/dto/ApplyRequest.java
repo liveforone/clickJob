@@ -1,14 +1,14 @@
 package clickJob.clickJob.apply.dto;
 
-import clickJob.clickJob.apply.model.Apply;
 import clickJob.clickJob.job.model.Job;
 import clickJob.clickJob.users.model.Users;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplyRequest {
 
     private Long id;

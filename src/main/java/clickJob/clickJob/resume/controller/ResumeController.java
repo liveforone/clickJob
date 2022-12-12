@@ -1,7 +1,7 @@
 package clickJob.clickJob.resume.controller;
 
 import clickJob.clickJob.resume.dto.ResumeRequest;
-import clickJob.clickJob.resume.model.Resume;
+import clickJob.clickJob.resume.dto.ResumeResponse;
 import clickJob.clickJob.resume.service.ResumeService;
 import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
 import java.security.Principal;
 
 @RestController
@@ -26,7 +25,7 @@ public class ResumeController {
 
     @GetMapping("/my-resume")
     public ResponseEntity<?> myResume(Principal principal) {
-        Resume resume = resumeService.getResume(principal.getName());
+        ResumeResponse resume = resumeService.getResumeResponse(principal.getName());
 
         if (CommonUtils.isNull(resume)) {  //null -> 이력서 등록 페이지로 리다이렉트
             String url = "/resume/post";
@@ -38,9 +37,7 @@ public class ResumeController {
                     .build();
         }
 
-        return ResponseEntity.ok(
-                resumeService.entityToDtoDetail(resume)
-        );
+        return ResponseEntity.ok(resume);
     }
 
     @GetMapping("/resume/post")
@@ -70,15 +67,13 @@ public class ResumeController {
 
     @GetMapping("/resume/edit")
     public ResponseEntity<?> resumeEditPage(Principal principal) {
-        Resume resume = resumeService.getResume(principal.getName());
+        ResumeResponse resume = resumeService.getResumeResponse(principal.getName());
 
         if (CommonUtils.isNull(resume)) {
             return ResponseEntity.ok("이력서가 없어 수정이 불가능합니다.");
         }
 
-        return ResponseEntity.ok(
-                resumeService.entityToDtoDetail(resume)
-        );
+        return ResponseEntity.ok(resume);
     }
 
     @PostMapping("/resume/edit")

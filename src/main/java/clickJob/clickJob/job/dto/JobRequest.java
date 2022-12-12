@@ -1,11 +1,12 @@
 package clickJob.clickJob.job.dto;
 
 import clickJob.clickJob.users.model.Users;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JobRequest {
 
     private Long id;

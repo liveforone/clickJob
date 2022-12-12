@@ -1,5 +1,6 @@
 package clickJob.clickJob.board.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class BoardResponse {
 
     private Long id;
@@ -16,14 +19,4 @@ public class BoardResponse {
     private int view;
     private int good;
     private LocalDate createdDate;
-
-    @Builder
-    public BoardResponse(Long id, String title, String content, int view, int good, LocalDate createdDate) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.view = view;
-        this.good = good;
-        this.createdDate = createdDate;
-    }
 }

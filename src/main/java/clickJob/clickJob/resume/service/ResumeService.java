@@ -6,7 +6,6 @@ import clickJob.clickJob.resume.model.Resume;
 import clickJob.clickJob.resume.repository.ResumeRepository;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.repository.UserRepository;
-import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +17,6 @@ public class ResumeService {
 
     private final ResumeRepository resumeRepository;
     private final UserRepository userRepository;
-
-    //== ResumeResponse builder method ==//
-    public ResumeResponse dtoBuilder(Resume resume) {
-        return ResumeResponse.builder()
-                .introduction(resume.getIntroduction())
-                .skill(resume.getSkill())
-                .location(resume.getLocation())
-                .academic(resume.getAcademic())
-                .build();
-    }
 
     //== dto -> entity ==//
     public Resume dtoToEntity(ResumeRequest resume) {
@@ -41,17 +30,8 @@ public class ResumeService {
                     .build();
     }
 
-    //== entity -> dto 편의메소드 - 엔티티 하나 ==//
-    public ResumeResponse entityToDtoDetail(Resume resume) {
-
-        if (CommonUtils.isNull(resume)) {
-            return null;
-        }
-        return dtoBuilder(resume);
-    }
-
-    public Resume getResume(String email) {
-        return resumeRepository.findByUserEmail(email);
+    public ResumeResponse getResumeResponse(String email) {
+        return resumeRepository.findOneDtoByUserEmail(email);
     }
 
     @Transactional
