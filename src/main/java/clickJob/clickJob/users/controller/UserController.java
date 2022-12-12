@@ -9,6 +9,7 @@ import clickJob.clickJob.users.dto.UserResponse;
 import clickJob.clickJob.users.model.Role;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.service.UserService;
+import clickJob.clickJob.users.util.UserUtils;
 import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.net.URI;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -92,7 +92,7 @@ public class UserController {
             return ResponseEntity.ok("해당 이메일의 회원은 존재하지 않습니다.");
         }
 
-        int checkPassword = userService.checkPasswordMatching(
+        int checkPassword = UserUtils.checkPasswordMatching(
                 userRequest.getPassword(),
                 users.getPassword()
         );
@@ -256,7 +256,7 @@ public class UserController {
             return ResponseEntity.ok("해당 이메일이 이미 존재합니다. 다시 입력해주세요");
         }
 
-        int checkPassword = userService.checkPasswordMatching(
+        int checkPassword = UserUtils.checkPasswordMatching(
                 userRequest.getPassword(),
                 users.getPassword()
         );
@@ -294,7 +294,7 @@ public class UserController {
                     .ok("해당 유저를 조회할 수 없어 비밀번호 변경이 불가능합니다.");
         }
 
-        int checkPassword = userService.checkPasswordMatching(
+        int checkPassword = UserUtils.checkPasswordMatching(
                 userRequest.getOldPassword(),
                 users.getPassword()
         );
@@ -331,7 +331,7 @@ public class UserController {
             return ResponseEntity.ok("해당 유저를 조회할 수 없어 탈퇴가 불가능합니다.");
         }
 
-        int checkPassword = userService.checkPasswordMatching(
+        int checkPassword = UserUtils.checkPasswordMatching(
                 password,
                 users.getPassword()
         );

@@ -6,6 +6,7 @@ import clickJob.clickJob.comment.dto.CommentRequest;
 import clickJob.clickJob.comment.dto.CommentResponse;
 import clickJob.clickJob.comment.model.Comment;
 import clickJob.clickJob.comment.service.CommentService;
+import clickJob.clickJob.comment.util.CommentMapper;
 import clickJob.clickJob.users.service.UserService;
 import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
@@ -92,7 +93,7 @@ public class CommentController {
             return ResponseEntity.ok("해당 댓글을 찾을 수 없습니다.");
         }
 
-        return ResponseEntity.ok(commentService.entityToDtoDetail(comment));
+        return ResponseEntity.ok(CommentMapper.entityToDtoDetail(comment));
     }
 
     /*

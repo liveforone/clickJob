@@ -4,9 +4,9 @@ import clickJob.clickJob.board.dto.BoardRequest;
 import clickJob.clickJob.board.dto.BoardResponse;
 import clickJob.clickJob.board.model.Board;
 import clickJob.clickJob.board.repository.BoardRepository;
+import clickJob.clickJob.board.util.BoardMapper;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.repository.UserRepository;
-import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,52 +21,14 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-    //== BoardResponse builder method ==//
-    public BoardResponse dtoBuilder(Board board) {
-        return BoardResponse.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .view(board.getView())
-                .good(board.getGood())
-                .createdDate(board.getCreatedDate())
-                .build();
-    }
-
-    //== dto -> entity ==//
-    public Board dtoToEntity(BoardRequest board) {
-        return Board.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .users(board.getUsers())
-                .view(board.getView())
-                .good(board.getGood())
-                .build();
-    }
-
-    //== entity ->  dto 편의메소드1 - 페이징 ==//
-    public Page<BoardResponse> entityToDtoPage(Page<Board> boardList) {
-        return boardList.map(this::dtoBuilder);
-    }
-
-    //== entity -> dto 편의메소드2 - detail ==//
-    public BoardResponse entityToDtoDetail(Board board) {
-
-        if (CommonUtils.isNull(board)) {
-            return null;
-        }
-        return dtoBuilder(board);
-    }
-
     public Page<BoardResponse> getAllBoard(Pageable pageable) {
-        return entityToDtoPage(
+        return BoardMapper.entityToDtoPage(
                 boardRepository.findAllBoard(pageable)
         );
     }
 
     public Page<BoardResponse> getSearchList(String keyword, Pageable pageable) {
-        return entityToDtoPage(
+        return BoardMapper.entityToDtoPage(
                 boardRepository.searchByTitle(
                     keyword,
                     pageable
@@ -75,7 +37,7 @@ public class BoardService {
     }
 
     public Page<BoardResponse> getBoardByEmail(String email, Pageable pageable) {
-        return entityToDtoPage(
+        return BoardMapper.entityToDtoPage(
                 boardRepository.findBoardByEmail(
                     email,
                     pageable
@@ -84,7 +46,7 @@ public class BoardService {
     }
 
     public Page<BoardResponse> getBoardByNickname(String nickname, Pageable pageable) {
-        return entityToDtoPage(
+        return BoardMapper.entityToDtoPage(
                 boardRepository.findBoardByNickname(
                     nickname,
                     pageable
@@ -103,7 +65,7 @@ public class BoardService {
         boardRequest.setUsers(users);
 
         return boardRepository.save(
-                dtoToEntity(boardRequest)).getId();
+                BoardMapper.dtoToEntity(boardRequest)).getId();
     }
 
     @Transactional
@@ -121,7 +83,7 @@ public class BoardService {
         boardRequest.setView(board.getView());
 
         boardRepository.save(
-                dtoToEntity(boardRequest)
+                BoardMapper.dtoToEntity(boardRequest)
         );
     }
 

@@ -4,6 +4,7 @@ import clickJob.clickJob.board.dto.BoardRequest;
 import clickJob.clickJob.board.dto.BoardResponse;
 import clickJob.clickJob.board.model.Board;
 import clickJob.clickJob.board.service.BoardService;
+import clickJob.clickJob.board.util.BoardMapper;
 import clickJob.clickJob.users.service.UserService;
 import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -108,7 +108,7 @@ public class BoardController {
         log.info("게시글 조회수 + 1");
 
         Map<String, Object> map = new HashMap<>();
-        BoardResponse board = boardService.entityToDtoDetail(boardEntity);
+        BoardResponse board = BoardMapper.entityToDtoDetail(boardEntity);
         String writer = boardEntity.getUsers().getNickname();
         String user = userService.getUserByEmail(principal.getName()).getNickname();
 
@@ -155,7 +155,7 @@ public class BoardController {
         }
 
         return ResponseEntity.ok(
-                boardService.entityToDtoDetail(boardEntity)
+                BoardMapper.entityToDtoDetail(boardEntity)
         );
     }
 

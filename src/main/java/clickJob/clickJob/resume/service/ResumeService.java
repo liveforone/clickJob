@@ -4,6 +4,7 @@ import clickJob.clickJob.resume.dto.ResumeRequest;
 import clickJob.clickJob.resume.dto.ResumeResponse;
 import clickJob.clickJob.resume.model.Resume;
 import clickJob.clickJob.resume.repository.ResumeRepository;
+import clickJob.clickJob.resume.util.ResumeMapper;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,18 +19,6 @@ public class ResumeService {
     private final ResumeRepository resumeRepository;
     private final UserRepository userRepository;
 
-    //== dto -> entity ==//
-    public Resume dtoToEntity(ResumeRequest resume) {
-        return Resume.builder()
-                    .id(resume.getId())
-                    .introduction(resume.getIntroduction())
-                    .skill(resume.getSkill())
-                    .location(resume.getLocation())
-                    .academic(resume.getAcademic())
-                    .users(resume.getUsers())
-                    .build();
-    }
-
     public ResumeResponse getResumeResponse(String email) {
         return resumeRepository.findOneDtoByUserEmail(email);
     }
@@ -41,7 +30,7 @@ public class ResumeService {
         resumeRequest.setUsers(users);
 
         resumeRepository.save(
-                dtoToEntity(resumeRequest)
+                ResumeMapper.dtoToEntity(resumeRequest)
         );
     }
 
@@ -53,7 +42,7 @@ public class ResumeService {
         resumeRequest.setUsers(resume.getUsers());
 
         resumeRepository.save(
-                dtoToEntity(resumeRequest)
+                ResumeMapper.dtoToEntity(resumeRequest)
         );
     }
 }

@@ -5,9 +5,10 @@ import clickJob.clickJob.users.dto.UserResponse;
 import clickJob.clickJob.users.model.Role;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.repository.UserRepository;
+import clickJob.clickJob.users.util.UserMapper;
+import clickJob.clickJob.users.util.UserUtils;
 import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,55 +34,9 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
     private static final int DUPLICATE = 0;
-    private static final int NOT_DUPLICATE = 1;
-    private static final int PASSWORD_MATCH = 1;
-    private static final int PASSWORD_NOT_MATCH = 0;
-
-    //== UserResponse builder method ==//
-    public UserResponse dtoBuilder(Users users) {
-        return UserResponse.builder()
-                .id(users.getId())
-                .email(users.getEmail())
-                .auth(users.getAuth())
-                .nickname(users.getNickname())
-                .build();
-    }
-
-    //== dto -> entity ==//
-    public Users dtoToEntity(UserRequest user) {
-        return Users.builder()
-                    .id(user.getId())
-                    .email(user.getEmail())
-                    .password(user.getPassword())
-                    .auth(user.getAuth())
-                    .nickname(user.getNickname())
-                    .build();
-    }
-
-    //== entity -> dto1 - detail ==//
-    public UserResponse entityToDtoDetail(Users users) {
-
-        if (CommonUtils.isNull(users)) {
-            return null;
-        }
-        return dtoBuilder(users);
-    }
-
-    //== entity -> dto2 - list ==//
-    public List<UserResponse> entityToDtoList(List<Users> usersList) {
-        return usersList
-                .stream()
-                .map(this::dtoBuilder)
-                .collect(Collectors.toList());
-    }
-
-    //== 무작위 닉네임 생성 - 숫자 + 문자 ==//
-    public String makeRandomNickname() {
-        return RandomStringUtils.randomAlphanumeric(10);
-    }
+    public static final int NOT_DUPLICATE = 1;
 
     //== 이메일 중복 검증 ==//
-    @Transactional(readOnly = true)
     public int checkDuplicateEmail(String email) {
         Users users = userRepository.findByEmail(email);
 
@@ -93,7 +47,6 @@ public class UserService implements UserDetailsService {
     }
 
     //== 닉네임 중복 검증 ==//
-    @Transactional(readOnly = true)
     public int checkDuplicateNickname(String nickname) {
         Users users = userRepository.findByNickname(nickname);
 
@@ -101,16 +54,6 @@ public class UserService implements UserDetailsService {
             return NOT_DUPLICATE;
         }
         return DUPLICATE;
-    }
-
-    //== 비밀번호 복호화 ==//
-    public int checkPasswordMatching(String inputPassword, String password) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        if (encoder.matches(inputPassword, password)) {
-            return PASSWORD_MATCH;
-        }
-        return PASSWORD_NOT_MATCH;
     }
 
     //== spring context 반환 메소드(필수) ==//
@@ -139,13 +82,13 @@ public class UserService implements UserDetailsService {
 
     //== 유저 responseDto 반환 ==//
     public UserResponse getUserByEmail(String email) {
-        return entityToDtoDetail(
+        return UserMapper.entityToDtoDetail(
                 userRepository.findByEmail(email)
         );
     }
 
     public List<UserResponse> getUserListByNickName(String nickname) {
-        return entityToDtoList(
+        return UserMapper.entityToDtoList(
                 userRepository.searchByNickName(nickname)
         );
     }
@@ -156,7 +99,7 @@ public class UserService implements UserDetailsService {
     }
 
     public UserResponse getUserByNickname(String nickname) {
-        return entityToDtoDetail(
+        return UserMapper.entityToDtoDetail(
                 userRepository.findByNickname(nickname)
         );
     }
@@ -168,10 +111,10 @@ public class UserService implements UserDetailsService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         userRequest.setAuth(Role.MEMBER);  //기본 권한 매핑
-        userRequest.setNickname(makeRandomNickname());  //무작위 닉네임 생성
+        userRequest.setNickname(UserUtils.makeRandomNickname());  //무작위 닉네임 생성
 
         userRepository.save(
-                dtoToEntity(userRequest)
+                UserMapper.dtoToEntity(userRequest)
         );
     }
 

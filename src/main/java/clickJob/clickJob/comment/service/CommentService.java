@@ -6,9 +6,9 @@ import clickJob.clickJob.comment.dto.CommentRequest;
 import clickJob.clickJob.comment.dto.CommentResponse;
 import clickJob.clickJob.comment.model.Comment;
 import clickJob.clickJob.comment.repository.CommentRepository;
+import clickJob.clickJob.comment.util.CommentMapper;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.repository.UserRepository;
-import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,44 +24,8 @@ public class CommentService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-    //== CommentResponse builder method ==//
-    public CommentResponse dtoBuilder(Comment comment) {
-        return CommentResponse.builder()
-                .id(comment.getId())
-                .writer(comment.getUsers().getNickname())
-                .content(comment.getContent())
-                .good(comment.getGood())
-                .createdDate(comment.getCreatedDate())
-                .build();
-    }
-
-    //== dto -> entity ==//
-    public Comment dtoToEntity(CommentRequest comment) {
-        return Comment.builder()
-                .id(comment.getId())
-                .users(comment.getUsers())
-                .content(comment.getContent())
-                .board(comment.getBoard())
-                .good(comment.getGood())
-                .build();
-    }
-
-    //== entity ->  dto 편의메소드1 - 페이징 형식 ==//
-    public Page<CommentResponse> entityToDtoPage(Page<Comment> commentList) {
-        return commentList.map(this::dtoBuilder);
-    }
-
-    //== entity -> dto 편의메소드2 - 엔티티 하나 ==//
-    public CommentResponse entityToDtoDetail(Comment comment) {
-
-        if (CommonUtils.isNull(comment)) {
-            return null;
-        }
-        return dtoBuilder(comment);
-    }
-
     public Page<CommentResponse> getCommentList(Long boardId, Pageable pageable) {
-        return entityToDtoPage(
+        return CommentMapper.entityToDtoPage(
                 commentRepository.findByBoardId(
                         boardId,
                         pageable
@@ -85,7 +49,7 @@ public class CommentService {
         commentRequest.setBoard(board);
 
         commentRepository.save(
-                dtoToEntity(commentRequest)
+                CommentMapper.dtoToEntity(commentRequest)
         );
     }
 

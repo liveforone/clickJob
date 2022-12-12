@@ -4,6 +4,7 @@ import clickJob.clickJob.job.dto.JobRequest;
 import clickJob.clickJob.job.dto.JobResponse;
 import clickJob.clickJob.job.model.Job;
 import clickJob.clickJob.job.service.JobService;
+import clickJob.clickJob.job.util.JobMapper;
 import clickJob.clickJob.users.service.UserService;
 import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -98,7 +98,7 @@ public class JobController {
         String writer = job.getUsers().getNickname();
         String user = userService.getUserByEmail(principal.getName()).getNickname();
 
-        map.put("job", jobService.entityToDtoDetail(job));
+        map.put("job", JobMapper.entityToDtoDetail(job));
         map.put("writer", writer);
         map.put("user", user);
 
@@ -121,7 +121,7 @@ public class JobController {
         }
 
         return ResponseEntity.ok(
-                jobService.entityToDtoDetail(job)
+                JobMapper.entityToDtoDetail(job)
         );
     }
 
