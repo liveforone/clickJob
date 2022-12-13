@@ -5,6 +5,7 @@ import clickJob.clickJob.users.dto.UserResponse;
 import clickJob.clickJob.users.model.Role;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.repository.UserRepository;
+import clickJob.clickJob.users.util.UserConstants;
 import clickJob.clickJob.users.util.UserMapper;
 import clickJob.clickJob.users.util.UserUtils;
 import clickJob.clickJob.utility.CommonUtils;
@@ -33,17 +34,14 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    private static final int DUPLICATE = 0;
-    public static final int NOT_DUPLICATE = 1;
-
     //== 이메일 중복 검증 ==//
     public int checkDuplicateEmail(String email) {
         Users users = userRepository.findByEmail(email);
 
         if (CommonUtils.isNull(users)) {
-            return NOT_DUPLICATE;
+            return UserConstants.NOT_DUPLICATE.getValue();
         }
-        return DUPLICATE;
+        return UserConstants.DUPLICATE.getValue();
     }
 
     //== 닉네임 중복 검증 ==//
@@ -51,9 +49,9 @@ public class UserService implements UserDetailsService {
         Users users = userRepository.findByNickname(nickname);
 
         if (CommonUtils.isNull(users)) {
-            return NOT_DUPLICATE;
+            return UserConstants.NOT_DUPLICATE.getValue();
         }
-        return DUPLICATE;
+        return UserConstants.DUPLICATE.getValue();
     }
 
     //== spring context 반환 메소드(필수) ==//

@@ -5,9 +5,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class UserUtils {
 
-    private static final int PASSWORD_MATCH = 1;
-    private static final int PASSWORD_NOT_MATCH = 0;
-
     //== 무작위 닉네임 생성 - 숫자 + 문자 ==//
     public static String makeRandomNickname() {
         return RandomStringUtils.randomAlphanumeric(10);
@@ -18,8 +15,8 @@ public class UserUtils {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         if (encoder.matches(inputPassword, password)) {
-            return PASSWORD_MATCH;
+            return UserConstants.PASSWORD_MATCH.getValue();
         }
-        return PASSWORD_NOT_MATCH;
+        return UserConstants.PASSWORD_NOT_MATCH.getValue();
     }
 }

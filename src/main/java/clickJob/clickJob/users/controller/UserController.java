@@ -9,6 +9,7 @@ import clickJob.clickJob.users.dto.UserResponse;
 import clickJob.clickJob.users.model.Role;
 import clickJob.clickJob.users.model.Users;
 import clickJob.clickJob.users.service.UserService;
+import clickJob.clickJob.users.util.UserConstants;
 import clickJob.clickJob.users.util.UserUtils;
 import clickJob.clickJob.utility.CommonUtils;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +38,6 @@ public class UserController {
     private final UserService userService;
     private final BoardService boardService;
 
-    private static final int NOT_DUPLICATE = 1;
-    private static final int PASSWORD_MATCH = 1;
-
     //== 메인 페이지 ==//
     @GetMapping("/")
     public ResponseEntity<?> home() {
@@ -57,7 +55,7 @@ public class UserController {
     public ResponseEntity<?> signup(@RequestBody UserRequest userRequest) {
         int checkEmail = userService.checkDuplicateEmail(userRequest.getEmail());
 
-        if (checkEmail != NOT_DUPLICATE) {  //이메일 중복 check
+        if (checkEmail != UserConstants.NOT_DUPLICATE.getValue()) {  //이메일 중복 check
             return ResponseEntity
                     .ok("중복되는 이메일이 있어 회원가입이 불가능합니다.");
         }
@@ -97,7 +95,7 @@ public class UserController {
                 users.getPassword()
         );
 
-        if (checkPassword != PASSWORD_MATCH) {  //PW check
+        if (checkPassword != UserConstants.PASSWORD_MATCH.getValue()) {  //PW check
             return ResponseEntity.ok("비밀번호가 일치하지 않습니다.");
         }
 
@@ -189,7 +187,7 @@ public class UserController {
     ) {
         int checkNickname = userService.checkDuplicateNickname(nickname);
 
-        if (checkNickname != NOT_DUPLICATE) {  //이메일 중복 check
+        if (checkNickname != UserConstants.NOT_DUPLICATE.getValue()) {  //이메일 중복 check
             return ResponseEntity
                     .ok("중복되는 닉네임이 있어 수정 불가능합니다.");
         }
@@ -261,7 +259,7 @@ public class UserController {
                 users.getPassword()
         );
 
-        if (checkPassword != PASSWORD_MATCH) {
+        if (checkPassword != UserConstants.PASSWORD_MATCH.getValue()) {
             log.info("비밀번호 일치하지 않음.");
             return ResponseEntity.ok("비밀번호가 다릅니다. 다시 입력해주세요.");
         }
@@ -299,7 +297,7 @@ public class UserController {
                 users.getPassword()
         );
 
-        if (checkPassword != PASSWORD_MATCH) {
+        if (checkPassword != UserConstants.PASSWORD_MATCH.getValue()) {
             log.info("비밀번호 일치하지 않음.");
             return ResponseEntity.ok("비밀번호가 다릅니다. 다시 입력해주세요.");
         }
@@ -336,7 +334,7 @@ public class UserController {
                 users.getPassword()
         );
 
-        if (checkPassword != PASSWORD_MATCH) {
+        if (checkPassword != UserConstants.PASSWORD_MATCH.getValue()) {
             log.info("비밀번호 일치하지 않음.");
             return ResponseEntity.ok("비밀번호가 다릅니다. 다시 입력해주세요.");
         }
