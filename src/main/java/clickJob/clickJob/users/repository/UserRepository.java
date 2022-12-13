@@ -19,7 +19,6 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     @Query("select u from Users u where u.nickname like %:nickname%")
     List<Users> searchByNickName(@Param("nickname") String nickname);
 
-    //== 권한 업데이트 ==//
     @Modifying
     @Query("update Users u set u.auth = :auth where u.email = :email")
     void updateAuth(@Param("auth") Role auth, @Param("email") String email);

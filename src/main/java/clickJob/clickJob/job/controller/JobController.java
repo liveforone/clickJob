@@ -81,7 +81,7 @@ public class JobController {
     }
 
     /*
-    여기에서 apply, 즉 구직버튼을 클릭함.
+    * 구직 신청
      */
     @GetMapping("/job/{id}")
     public ResponseEntity<?> jobDetail(

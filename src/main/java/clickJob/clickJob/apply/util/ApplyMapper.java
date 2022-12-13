@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 
 public class ApplyMapper {
 
-    //== dto -> entity ==//
+    /*
+     * dto ->  entity 변환 편의 메소드
+     */
     public static Apply dtoToEntity(ApplyRequest apply) {
         return Apply.builder()
                 .id(apply.getId())
@@ -19,21 +21,28 @@ public class ApplyMapper {
                 .build();
     }
 
-    //== ApplyUserResponse builder ==//
+    /*
+     * ApplyUserResponse builder 편의 메소드
+     */
     private static ApplyUserResponse applyUserResponseBuilder(Apply apply) {
         return ApplyUserResponse.builder()
                 .company(apply.getJob().getCompany())
                 .build();
     }
 
-    //== ApplyJobResponse builder ==//
+    /*
+     * ApplyJobResponse builder 편의 메소드
+     */
     private static ApplyJobResponse applyJobResponseBuilder(Apply apply) {
         return ApplyJobResponse.builder()
                 .name(apply.getUsers().getNickname())
                 .build();
     }
 
-    //entity -> dto1 - user response list ==//
+    /*
+     * entity -> ApplyUserResponse 편의 메소드1
+     * 반환 타입 : 리스트형식
+     */
     public static List<ApplyUserResponse> entityToDtoListUserResponse(List<Apply> applyList) {
         return applyList
                 .stream()
@@ -41,7 +50,10 @@ public class ApplyMapper {
                 .collect(Collectors.toList());
     }
 
-    //== entity -> dto2 - job response list ==//
+    /*
+     * entity -> ApplyJobResponse 편의 메소드1
+     * 반환 타입 : 리스트형식
+     */
     public static List<ApplyJobResponse> entityToDtoJobResponse(List<Apply> applyList) {
         return applyList
                 .stream()

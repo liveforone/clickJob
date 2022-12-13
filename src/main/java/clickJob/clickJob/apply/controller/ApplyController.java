@@ -29,9 +29,6 @@ public class ApplyController {
     private final ApplyService applyService;
     private final JobService jobService;
 
-    /*
-    job 작성자만 확인 가능
-     */
     @GetMapping("/apply-list/{jobId}")
     public ResponseEntity<?> applyList(
             @PathVariable("jobId") Long jobId,

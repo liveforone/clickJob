@@ -19,7 +19,10 @@ public class FollowService {
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
 
-    //== 내가 팔로우하는 사람들 ==//
+    /*
+    * follow list
+    * what : 내가 팔로우 하는
+     */
     public List<String> getMyFollowList(String email) {
         List<Follow> followList = followRepository.findByFollower(email);
         return followList
@@ -28,7 +31,10 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
-    //== 나를 팔로우하는 사람들 ==//
+    /*
+    * follow list
+    * what : 나를 팔로우 하는
+     */
     public List<String> getMyFollowerList(String email) {
         List<Follow> followerList = followRepository.findByUsers(email);
         return followerList
@@ -37,7 +43,10 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
-    //== 프로필 - 프로필 주인이 팔로우하는 사람들 ==//
+    /*
+    * profile
+    * what : 해당 프로필의 주인이 팔로우 하는
+     */
     public List<String> getProfileFollowList(String nickname) {
         List<Follow> followList = followRepository.findByFollowerNickname(nickname);
         return followList
@@ -46,7 +55,10 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
-    //== 프로필 - 프로필 주인을 팔로우하는 사람들 ==//
+    /*
+    * profile
+    * 해당 프로필의 주인을 팔로우 하는
+     */
     public List<String> getProfileFollowerList(String nickname) {
         List<Follow> followerList = followRepository.findByUsersNickname(nickname);
         return followerList
@@ -54,8 +66,7 @@ public class FollowService {
                 .map(follow -> follow.getFollower().getNickname())
                 .collect(Collectors.toList());
     }
-    
-    //== follow detail ==//
+
     public Follow getFollowEntity(String followerEmail, String userNickname) {
         Users me = userRepository.findByEmail(followerEmail);  //나
         Users myFollow = userRepository.findByNickname(userNickname);  //나의 팔로잉, 팔로잉 당하는 사람

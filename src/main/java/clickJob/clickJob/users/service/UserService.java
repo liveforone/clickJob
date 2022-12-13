@@ -34,7 +34,9 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    //== 이메일 중복 검증 ==//
+    /*
+    * 이메일 중복 검증
+     */
     public int checkDuplicateEmail(String email) {
         Users users = userRepository.findByEmail(email);
 
@@ -44,7 +46,9 @@ public class UserService implements UserDetailsService {
         return UserConstants.DUPLICATE.getValue();
     }
 
-    //== 닉네임 중복 검증 ==//
+    /*
+    * 닉네임 중복 검증
+     */
     public int checkDuplicateNickname(String nickname) {
         Users users = userRepository.findByNickname(nickname);
 
@@ -54,7 +58,6 @@ public class UserService implements UserDetailsService {
         return UserConstants.DUPLICATE.getValue();
     }
 
-    //== spring context 반환 메소드(필수) ==//
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Users users = userRepository.findByEmail(email);
@@ -73,12 +76,10 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    //== 유저 엔티티 반환 ==//
     public Users getUserEntity(String email) {
         return userRepository.findByEmail(email);
     }
 
-    //== 유저 responseDto 반환 ==//
     public UserResponse getUserByEmail(String email) {
         return UserMapper.entityToDtoDetail(
                 userRepository.findByEmail(email)
@@ -91,7 +92,10 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    //== 전체 유저 리턴 for admin ==//
+    /*
+    * 전체 유저 반환
+    * when : admin page
+     */
     public List<Users> getAllUsersForAdmin() {
         return userRepository.findAll();
     }
@@ -102,7 +106,6 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    //== 회원 가입 로직 ==//
     @Transactional
     public void joinUser(UserRequest userRequest) {
         //비밀번호 암호화
@@ -116,7 +119,6 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    //== 로그인 - 세션과 컨텍스트홀더 사용 ==//
     @Transactional
     public void login(UserRequest userRequest, HttpSession httpSession)
             throws UsernameNotFoundException
@@ -136,9 +138,9 @@ public class UserService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         /*
-        처음 어드민이 로그인을 하는경우 이메일로 판별해서 권한을 admin 으로 변경해주고
-        그 다음부터 어드민이 업데이트 할때에는 auth 칼럼으로 판별해서 db 업데이트 하지않고,
-        GrantedAuthority 만 업데이트 해준다.
+        * 처음 어드민이 로그인을 하는경우 이메일로 판별해서 권한을 admin 으로 변경해주고
+        * 그 다음부터 어드민이 업데이트 할때에는 auth 칼럼으로 판별해서 db 업데이트 하지않고,
+        * GrantedAuthority 만 업데이트 해준다.
          */
         if (user.getAuth() != Role.ADMIN && ("admin@breve.com").equals(email)) {
             authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));

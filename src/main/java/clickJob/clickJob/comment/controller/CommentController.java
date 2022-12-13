@@ -96,9 +96,6 @@ public class CommentController {
         return ResponseEntity.ok(CommentMapper.entityToDtoDetail(comment));
     }
 
-    /*
-    뷰에서 검증했지만 한 번 더 작성자와 현재 유저를 판별한다.
-     */
     @PostMapping("/comment/edit/{id}")
     public ResponseEntity<?> commentEdit(
             @PathVariable("id") Long id,

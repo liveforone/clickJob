@@ -1,6 +1,5 @@
 package clickJob.clickJob.comment.repository;
 
-import clickJob.clickJob.comment.dto.CommentResponse;
 import clickJob.clickJob.comment.model.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

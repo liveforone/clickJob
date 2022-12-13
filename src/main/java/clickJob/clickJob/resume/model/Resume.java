@@ -21,7 +21,7 @@ public class Resume {
     private String introduction;  //소개 및 설명
 
     @Column(columnDefinition = "TEXT")
-    private String skill;  //직무 스킬넣기
+    private String skill;  //직무 스킬
 
     @Column(columnDefinition = "TEXT")
     private String location;

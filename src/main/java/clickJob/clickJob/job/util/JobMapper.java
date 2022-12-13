@@ -8,7 +8,9 @@ import org.springframework.data.domain.Page;
 
 public class JobMapper {
 
-    //== dto -> entity ==//
+    /*
+     * dto ->  entity 변환 편의 메소드
+     */
     public static Job dtoToEntity(JobRequest job) {
         return Job.builder()
                 .id(job.getId())
@@ -22,7 +24,9 @@ public class JobMapper {
                 .build();
     }
 
-    //== JobResponse builder method ==//
+    /*
+     * JobResponse builder 편의 메소드
+     */
     private static JobResponse dtoBuilder(Job job) {
         return JobResponse.builder()
                 .id(job.getId())
@@ -36,12 +40,18 @@ public class JobMapper {
                 .build();
     }
 
-    //== entity ->  dto 편의메소드1 - 페이징 형식 ==//
+    /*
+     * entity ->  dto 편의 메소드1
+     * 반환 타입 : 페이징 형식
+     */
     public static Page<JobResponse> entityToDtoPage(Page<Job> jobList) {
         return jobList.map(JobMapper::dtoBuilder);
     }
 
-    //== entity -> dto 편의메소드2 - 엔티티 하나 ==//
+    /*
+     * entity -> dto 편의 메소드2
+     * 반환 타입 : 엔티티 하나
+     */
     public static JobResponse entityToDtoDetail(Job job) {
         if (CommonUtils.isNull(job)) {
             return null;

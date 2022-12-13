@@ -5,7 +5,9 @@ import clickJob.clickJob.resume.model.Resume;
 
 public class ResumeMapper {
 
-    //== dto -> entity ==//
+    /*
+    * dto -> entity 편의 메소드
+     */
     public static Resume dtoToEntity(ResumeRequest resume) {
         return Resume.builder()
                 .id(resume.getId())

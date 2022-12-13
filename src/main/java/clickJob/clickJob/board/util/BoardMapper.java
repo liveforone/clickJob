@@ -8,7 +8,9 @@ import org.springframework.data.domain.Page;
 
 public class BoardMapper {
 
-    //== dto -> entity ==//
+    /*
+     * dto ->  entity 변환 편의 메소드
+     */
     public static Board dtoToEntity(BoardRequest board) {
         return Board.builder()
                 .id(board.getId())
@@ -20,7 +22,9 @@ public class BoardMapper {
                 .build();
     }
 
-    //== BoardResponse builder method ==//
+    /*
+     * BoardResponse builder 편의 메소드
+     */
     private static BoardResponse dtoBuilder(Board board) {
         return BoardResponse.builder()
                 .id(board.getId())
@@ -32,12 +36,18 @@ public class BoardMapper {
                 .build();
     }
 
-    //== entity ->  dto 편의메소드1 - 페이징 ==//
+    /*
+     * entity ->  dto 편의 메소드1
+     * 반환 타입 : 페이징 형식
+     */
     public static Page<BoardResponse> entityToDtoPage(Page<Board> boardList) {
         return boardList.map(BoardMapper::dtoBuilder);
     }
 
-    //== entity -> dto 편의메소드2 - detail ==//
+    /*
+     * entity -> dto 편의 메소드2
+     * 반환 타입 : 엔티티 하나
+     */
     public static BoardResponse entityToDtoDetail(Board board) {
 
         if (CommonUtils.isNull(board)) {

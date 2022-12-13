@@ -38,19 +38,16 @@ public class UserController {
     private final UserService userService;
     private final BoardService boardService;
 
-    //== 메인 페이지 ==//
     @GetMapping("/")
     public ResponseEntity<?> home() {
         return ResponseEntity.ok("home");
     }
 
-    //== 회원가입 페이지 ==//
     @GetMapping("/user/signup")
     public ResponseEntity<?> signupPage() {
         return ResponseEntity.ok("회원가입페이지");
     }
 
-    //== 회원가입 처리 ==//
     @PostMapping("/user/signup")
     public ResponseEntity<?> signup(@RequestBody UserRequest userRequest) {
         int checkEmail = userService.checkDuplicateEmail(userRequest.getEmail());
@@ -72,13 +69,11 @@ public class UserController {
                 .build();
     }
 
-    //== 로그인 페이지 ==//
     @GetMapping("/user/login")
     public ResponseEntity<?> loginPage() {
         return ResponseEntity.ok("로그인 페이지");
     }
 
-    //== 로그인 ==//
     @PostMapping("/user/login")
     public ResponseEntity<?> loginPage(
             @RequestBody UserRequest userRequest,
@@ -115,12 +110,11 @@ public class UserController {
     }
 
     /*
-    로그아웃은 시큐리티 단에서 이루어짐.
-    url : /user/logout
-    method : POST
+    * 로그아웃은 시큐리티 단에서 이루어짐.
+    * url : /user/logout
+    * method : POST
      */
 
-    //== 접근 거부 페이지 ==//
     @GetMapping("/user/prohibition")
     public ResponseEntity<?> prohibition() {
         return ResponseEntity
@@ -154,7 +148,10 @@ public class UserController {
         return ResponseEntity.ok(map);
     }
 
-    //== Profile - 상대가 보는 내 프로필 ==// 닉네임으로 들고옴.
+    /*
+    * profile
+    * who : 다른 사람이 보는 내 프로필
+     */
     @GetMapping("/user/profile/{nickname}")
     public ResponseEntity<?> ProfilePage(
             @PageableDefault(page = 0, size = 10)
@@ -179,7 +176,6 @@ public class UserController {
         return ResponseEntity.ok(map);
     }
 
-    //== 닉네임 등록 ==//
     @PostMapping("/user/nickname-post")
     public ResponseEntity<?> nicknamePost(
             @RequestBody String nickname,
@@ -207,7 +203,6 @@ public class UserController {
                 .build();
     }
 
-    //== 닉네임으로 유저 검색 ==//
     @GetMapping("/user/search")
     public ResponseEntity<?> searchPage(
             @RequestParam("nickname") String nickname
@@ -221,7 +216,6 @@ public class UserController {
         return ResponseEntity.ok(userList);
     }
 
-    //== 어드민 페이지 ==//
     @GetMapping("/admin")
     public ResponseEntity<?> admin(Principal principal) {
         Users users = userService.getUserEntity(principal.getName());
@@ -237,7 +231,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsersForAdmin());
     }
 
-    //== 이메일 변경 ==//
     @PostMapping("/user/change-email")
     public ResponseEntity<?> changeEmail(
             @RequestBody UserChangeEmailRequest userRequest,
@@ -279,7 +272,6 @@ public class UserController {
                 .build();
     }
 
-    //== 비밀번호 변경 ==//
     @PostMapping("/user/change-password")
     public ResponseEntity<?> changePassword(
             @RequestBody UserChangePasswordRequest userRequest,
@@ -317,7 +309,6 @@ public class UserController {
                 .build();
     }
 
-    //== 회원 탈퇴 ==//
     @PostMapping("/user/withdraw")
     public ResponseEntity<?> userWithdraw(
             @RequestBody String password,

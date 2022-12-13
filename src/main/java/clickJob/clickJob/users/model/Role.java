@@ -3,8 +3,8 @@ package clickJob.clickJob.users.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public enum Role {
 
     ADMIN("ROLE_ADMIN"),

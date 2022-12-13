@@ -1,10 +1,11 @@
 package clickJob.clickJob.users.dto;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserChangeEmailRequest {
 
     private String email;
